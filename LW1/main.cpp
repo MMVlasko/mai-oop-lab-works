@@ -1,8 +1,9 @@
 #include <iostream>
+#include <algorithm>
 #include "include/solver.h"
 
 int main() {
-    setlocale(LC_ALL, "ru-RU");
+    std::locale::global(std::locale("ru_RU.UTF-8"));
     std::string day;
     int number;
 
@@ -11,7 +12,7 @@ int main() {
 
     std::cout << "Введите число:" << std::endl;
     std::cin >> number;
-
+    
     auto result = solver(day, number);
 
     std::cout << result << std::endl;

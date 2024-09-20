@@ -1,2 +1,3 @@
 #pragma once
-bool solver(const std::string &day, int number);
+
+bool solver(std::string day, int number);
