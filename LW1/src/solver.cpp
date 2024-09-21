@@ -1,7 +1,7 @@
 #include <string> 
 #include "../include/solver.h" 
  
-bool solver(std::string day, int number) { 
+bool solver(const std::string& day, int number) { 
     return day == "понедельник" && number == 12 || 
             day == "вторник" && number > 95 || 
             day == "среда" && number == 34 || 

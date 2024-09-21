@@ -3,57 +3,68 @@
  
 TEST(test_01, basic_test_set) 
 { 
-ASSERT_TRUE(solver("понедельник", 12) == 1); 
+    bool result = solver("понедельник", 12);
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_02, basic_test_set) 
 { 
-ASSERT_TRUE(solver("вторник", 96) == 1); 
+    bool result = solver("вторник", 96);
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_03, basic_test_set) 
 { 
-ASSERT_TRUE(solver("вторник", 95) == 0); 
+    bool result = solver("вторник", 95);
+    ASSERT_TRUE(result == 0); 
 } 
 
 TEST(test_04, basic_test_set) 
 { 
-ASSERT_TRUE(solver("среда", 34) == 1); 
+    bool result = solver("среда", 34);
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_05, basic_test_set) 
 { 
-ASSERT_TRUE(solver("четверг", 0) == 1); 
+    bool result = solver("четверг", 0); 
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_06, basic_test_set) 
 { 
-ASSERT_TRUE(solver("пятница", 888) == 1); 
+    bool result = solver("пятница", 888);
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_07, basic_test_set) 
 { 
-ASSERT_TRUE(solver("пятница", 889) == 0); 
+    bool result = solver("пятница", 889);
+    ASSERT_TRUE(result == 0); 
 } 
 
 TEST(test_08, basic_test_set) 
 { 
-ASSERT_TRUE(solver("суббота", 56) == 1); 
+    bool result = solver("суббота", 56); 
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_09, basic_test_set) 
 { 
-ASSERT_TRUE(solver("воскресенье", 666) == 1); 
+    bool result = solver("воскресенье", 666);
+    ASSERT_TRUE(result == 1); 
 } 
 
 TEST(test_10, basic_test_set) 
 { 
-ASSERT_TRUE(solver("воскресенье", -666) == 1); 
+    bool result = solver("воскресенье", -666);
+    ASSERT_TRUE(result == 1); 
 }
 
 TEST(test_11, basic_test_set) 
 { 
-ASSERT_TRUE(solver("абвгде", 777) == 0); 
+    bool result = solver("абвгде", 777);
+    ASSERT_TRUE(result == 0); 
 } 
  
 int main(int argc, char **argv) { 
