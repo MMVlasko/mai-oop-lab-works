@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLW2_tools.a CMakeFiles/LW2_tools.dir/src/tools.cpp.o
+/usr/bin/ranlib libLW2_tools.a

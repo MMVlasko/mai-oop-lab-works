@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLW2_array.a CMakeFiles/LW2_array.dir/src/array.cpp.o
+/usr/bin/ranlib libLW2_array.a

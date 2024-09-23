@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/LW2.dir/main.cpp.o -o LW2  libLW2_array.a libLW2_hex.a libLW2_array.a libLW2_exceptions.a libLW2_tools.a 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLW2_exceptions.a CMakeFiles/LW2_exceptions.dir/src/exceptions.cpp.o
+/usr/bin/ranlib libLW2_exceptions.a

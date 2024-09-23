@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLW2_hex.a CMakeFiles/LW2_hex.dir/src/hex.cpp.o
+/usr/bin/ranlib libLW2_hex.a

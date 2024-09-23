@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/LW2_tests.dir/test/test_array.cpp.o -o LW2_tests  libLW2_array.a ../lib/libgtest_main.a libLW2_exceptions.a ../lib/libgtest.a 
