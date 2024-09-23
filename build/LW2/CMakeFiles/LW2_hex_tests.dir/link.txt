@@ -1,1 +1,0 @@
-/usr/bin/g++ -g CMakeFiles/LW2_hex_tests.dir/test/test_hex.cpp.o -o LW2_hex_tests  libLW2_hex.a ../lib/libgtest_main.a libLW2_array.a libLW2_exceptions.a libLW2_tools.a ../lib/libgtest.a 

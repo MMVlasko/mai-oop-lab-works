@@ -112,6 +112,13 @@ void Array::insert(unsigned char element, size_t index) {
     ++size;
 }
 
+std::string Array::to_string() {
+    std::string result = "";
+    for (int i = 0; i < size; i++)
+        result += _elements[i];
+    return result;
+}
+
 void Array::print() {
     std::cout << '[';
     for (int i = 0; i + 1 < size; i++)

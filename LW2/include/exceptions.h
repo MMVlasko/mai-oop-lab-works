@@ -22,3 +22,13 @@ class ArrayIsEmptyException : public std::exception {
 
         const char* what() const noexcept override;
 };
+
+class ResultIsNegativeException : public std::exception {
+    private:
+        std::string _msg;
+    
+    public:
+        ResultIsNegativeException(std::string msg);
+
+        const char* what() const noexcept override;
+};

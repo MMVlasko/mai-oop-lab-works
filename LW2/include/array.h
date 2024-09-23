@@ -40,5 +40,7 @@ class Array {
 
         void insert(unsigned char element, size_t index);
 
+        std::string to_string();
+
         void print();
 };

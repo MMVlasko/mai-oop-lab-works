@@ -11,3 +11,9 @@ ArrayIsEmptyException::ArrayIsEmptyException(std::string msg) : _msg {msg} {}
 const char* ArrayIsEmptyException::what() const noexcept {
     return _msg.c_str();
 }
+
+ResultIsNegativeException::ResultIsNegativeException(std::string msg) : _msg {msg} {}
+
+const char* ResultIsNegativeException::what() const noexcept {
+    return _msg.c_str();
+}
