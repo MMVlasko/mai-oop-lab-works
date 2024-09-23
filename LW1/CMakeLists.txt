@@ -16,14 +16,14 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 
-add_library(${CMAKE_PROJECT_NAME}_lib src/solver.cpp)
-add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
+add_library(LW1_lib src/solver.cpp)
+add_executable(LW1 main.cpp)
 
-target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+target_link_libraries(LW1 PRIVATE LW1_lib)
 
 enable_testing()
 
-add_executable(tests test/test_solver.cpp)
-target_link_libraries(tests ${CMAKE_PROJECT_NAME}_lib gtest_main)
+add_executable(LW1_tests test/test_solver.cpp)
+target_link_libraries(LW1_tests LW1_lib gtest_main)
 
-add_test(NAME MyProjectTests COMMAND tests)
+add_test(NAME MyProjectTests COMMAND LW1_tests)

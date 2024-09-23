@@ -4,6 +4,7 @@
 
 int main() {
     std::locale::global(std::locale("ru_RU.UTF-8"));
+    
     std::string day;
     int number;
 
