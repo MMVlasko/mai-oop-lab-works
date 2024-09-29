@@ -42,5 +42,5 @@ class Array {
 
         std::string to_string();
 
-        void print();
+        friend std::ostream& operator<<(std::ostream& os, Array& number);
 };

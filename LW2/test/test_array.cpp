@@ -1,7 +1,7 @@
 #include <gtest/gtest.h> 
 
-#include "../include/exceptions.h"
-#include "../include/array.h" 
+#include <exceptions.h>
+#include <array.h>
 
 TEST(empty_constructor, test)
 {
@@ -187,7 +187,7 @@ TEST(print, test)
     auto array = Array(str);
 
     testing::internal::CaptureStdout();
-    array.print();
+    std::cout << array;
     auto output = testing::internal::GetCapturedStdout();
 
     ASSERT_EQ(output, result);

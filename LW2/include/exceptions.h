@@ -32,3 +32,23 @@ class ResultIsNegativeException : public std::exception {
 
         const char* what() const noexcept override;
 };
+
+class NoHexNumericException : public std::exception {
+    private:
+        std::string _msg;
+    
+    public:
+        NoHexNumericException(std::string msg);
+
+        const char* what() const noexcept override;
+};
+
+class TooBigNumberException : public std::exception {
+    private:
+        std::string _msg;
+    
+    public:
+        TooBigNumberException(std::string msg);
+
+        const char* what() const noexcept override;
+};

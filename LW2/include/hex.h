@@ -1,6 +1,7 @@
 #pragma once
 
-#include "array.h"
+#include <array.h>
+
 class Hex {
     private:
         Array *_number;
@@ -10,7 +11,7 @@ class Hex {
 
         Hex(const std::string &t);
 
-        Hex(unsigned int number);
+        Hex(unsigned long long int number);
 
         Hex(const Hex &other);
 
@@ -22,7 +23,9 @@ class Hex {
 
         virtual ~Hex() noexcept;
 
-        unsigned int to_decimal();
+        unsigned long long int to_decimal();
+
+        std::string to_string();
 
         Hex operator+(Hex &other);
 

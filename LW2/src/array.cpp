@@ -1,7 +1,8 @@
-#include "../include/exceptions.h"
-#include "../include/array.h"
 #include <cstring> 
 #include <iostream>
+
+#include <exceptions.h>
+#include <array.h>
  
 Array::Array() : _elements{nullptr}, _capacity{0}, size{0} {} 
  
@@ -114,15 +115,15 @@ void Array::insert(unsigned char element, size_t index) {
 
 std::string Array::to_string() {
     std::string result = "";
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; ++i)
         result += _elements[i];
     return result;
 }
 
-void Array::print() {
-    std::cout << '[';
-    for (int i = 0; i + 1 < size; i++)
-        std::cout << _elements[i] << ", ";
-    std::cout << _elements[size - 1] << ']' << std::endl;
+std::ostream& operator<<(std::ostream& os, Array& array) {
+    os << '[';
+    for (int i = 0; i + 1 < array.size; ++i)
+        os << array._elements[i] << ", ";
+    os << array._elements[array.size - 1] << ']' << std::endl;
+    return os;
 }
-
