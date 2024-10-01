@@ -54,12 +54,14 @@ unsigned long long int Hex::to_decimal() {
     for (int i = 0; i < _number->size; i++) {
         unsigned long long int digit = get_decimal_numeric((*_number)[i]) * static_cast<unsigned long long int>(pow(16, i));
 
+        // если очередное слагоемое вышло за границу lli
         if (digit == 0 && get_decimal_numeric((*_number)[i]) != 0)
             throw TooBigNumberException("The decimal representation is too big");
 
         result += digit;
     }
 
+    // если итоговая сумма вышла за границу lli
     if (result == 0 && to_string() != "0")
         throw TooBigNumberException("The decimal representation is too big");
 
@@ -78,7 +80,7 @@ Hex Hex::operator+(Hex &other) {
 }
 
 Hex Hex::operator-(Hex &other) {
-    auto result = to_decimal() - other.to_decimal();
+    int result = to_decimal() - other.to_decimal();
 
     if (result < 0)
         throw ResultIsNegativeException("Result shouldn't be negative");

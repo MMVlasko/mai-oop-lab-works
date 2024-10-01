@@ -38,6 +38,8 @@ class Array {
 
         bool operator==(Array &other);
 
+        bool operator!=(Array &other);
+
         void insert(unsigned char element, size_t index);
 
         std::string to_string();

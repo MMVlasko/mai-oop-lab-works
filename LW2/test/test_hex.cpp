@@ -164,6 +164,7 @@ TEST(minus_operator, test)
     auto result = result_number.to_decimal();
 
     ASSERT_EQ(result, expected_result);
+    ASSERT_THROW(first_number - second_number, ResultIsNegativeException);
 }
 
 TEST(more_operator, test) 
