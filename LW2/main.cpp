@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <limits>
 
-#include "include/hex.h"
-#include "include/exceptions.h"
+#include <hex.h>
+#include <exceptions.h>
 
 int main() {
     Hex *first_number = nullptr;
