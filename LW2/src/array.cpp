@@ -132,6 +132,19 @@ void Array::insert(unsigned char element, size_t index) {
     ++size;
 }
 
+unsigned char Array::pop(size_t index) {
+    if (index >= size)
+        throw IndexOutOfRangeException("Index out of range");
+
+    unsigned char temp = _elements[index];
+
+    for (int i = index + 1; i < size; ++i) 
+        _elements[i - 1] = _elements[i];
+    
+    --size;
+    return temp;
+}
+
 std::string Array::to_string() {
     std::string result = "";
 

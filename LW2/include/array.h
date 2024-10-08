@@ -42,6 +42,8 @@ class Array {
 
         void insert(unsigned char element, size_t index);
 
+        unsigned char pop(size_t index);
+
         std::string to_string();
 
         friend std::ostream& operator<<(std::ostream& os, Array& number);

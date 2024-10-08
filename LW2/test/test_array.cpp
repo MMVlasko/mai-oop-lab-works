@@ -199,6 +199,21 @@ TEST(insert, test_empty_array)
     ASSERT_TRUE(array == new_array);
 }
 
+TEST(pop, test)
+{
+    auto str = "abcd";
+    auto expected_symbol = 'b';
+    auto expected_size = 3;
+    
+    auto array = Array(str);
+
+    auto result = array.pop(1);
+
+    ASSERT_EQ(array.size, expected_size);
+    ASSERT_EQ(expected_symbol, result);
+    ASSERT_THROW(array.pop(3), IndexOutOfRangeException);
+}
+
 TEST(to_string, test)
 {
     auto str = "abcde";
