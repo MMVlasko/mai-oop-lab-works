@@ -22,11 +22,17 @@ add_library(LW3_array include/array.h)
 add_library(LW3_figure src/figure.cpp)
 target_include_directories(LW3_figure PRIVATE include)
 
+add_library(LW3_square src/square.cpp)
+target_include_directories(LW3_square PRIVATE include)
+
 add_library(LW3_exceptions src/exceptions.cpp)
 target_include_directories(LW3_exceptions PRIVATE include)
 
 add_library(LW3_point src/point.cpp)
 target_include_directories(LW3_point PRIVATE include)
+
+add_library(LW3_tools src/tools.cpp)
+target_include_directories(LW3_tools PRIVATE include)
 
 add_executable(LW3 main.cpp)
 target_include_directories(LW3 PRIVATE include)
@@ -34,7 +40,7 @@ target_include_directories(LW3 PRIVATE include)
 # target_link_libraries(LW2 PRIVATE LW2_array)
 # target_link_libraries(LW2 PRIVATE LW2_hex)
 target_link_libraries(LW3_array PRIVATE LW3_exceptions)
-target_link_libraries(LW3_figure PRIVATE LW3_exceptions)
+target_link_libraries(LW3_figure PRIVATE LW3_exceptions LW3_tools)
 # target_link_libraries(LW2_hex PRIVATE LW2_array)
 # target_link_libraries(LW2_hex PRIVATE LW2_tools)
 # target_link_libraries(LW2_tools PRIVATE LW2_exceptions)
@@ -47,11 +53,19 @@ target_include_directories(LW3_array_tests PRIVATE include)
 add_executable(LW3_figure_tests test/test_figure.cpp)
 target_include_directories(LW3_figure_tests PRIVATE include)
 
+add_executable(LW3_square_tests test/test_square.cpp)
+target_include_directories(LW3_square_tests PRIVATE include)
+
 add_executable(LW3_point_tests test/test_point.cpp)
 target_include_directories(LW3_point_tests PRIVATE include)
 
+add_executable(LW3_tools_tests test/test_tools.cpp)
+target_include_directories(LW3_tools_tests PRIVATE include)
+
 target_link_libraries(LW3_array_tests LW3_array gtest_main)
 target_link_libraries(LW3_figure_tests LW3_figure LW3_array LW3_point gtest_main)
+target_link_libraries(LW3_square_tests LW3_square LW3_figure LW3_array LW3_point gtest_main)
 target_link_libraries(LW3_point_tests LW3_point gtest_main)
+target_link_libraries(LW3_tools_tests LW3_tools LW3_array LW3_point LW3_exceptions gtest_main)
 
-add_test(NAME MyProjectTests COMMAND LW3_array_tests LW3_figure_tests)
+add_test(NAME MyProjectTests COMMAND LW3_array_tests LW3_figure_tests LW3_point_tests LW3_tools_tests)

@@ -23,5 +23,7 @@ class Point {
 
         bool operator!=(Point &other);
 
+        double distance(Point &other);
+
         friend std::ostream& operator<<(std::ostream &os, Point &point);
 };

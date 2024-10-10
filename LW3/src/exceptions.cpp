@@ -12,20 +12,20 @@ const char* ArrayIsEmptyException::what() const noexcept {
     return _msg.c_str();
 }
 
-ResultIsNegativeException::ResultIsNegativeException(std::string msg) : _msg {msg} {}
+NotImplementedException::NotImplementedException(std::string msg) : _msg {msg} {}
 
-const char* ResultIsNegativeException::what() const noexcept {
+const char* NotImplementedException::what() const noexcept {
     return _msg.c_str();
 }
 
-NoHexNumericException::NoHexNumericException(std::string msg) : _msg {msg} {}
+UninitializedException::UninitializedException(std::string msg) : _msg {msg} {}
 
-const char* NoHexNumericException::what() const noexcept {
+const char* UninitializedException::what() const noexcept {
     return _msg.c_str();
 }
 
-TooBigNumberException::TooBigNumberException(std::string msg) : _msg {msg} {}
+BadInputDataException::BadInputDataException(std::string msg) : _msg {msg} {}
 
-const char* TooBigNumberException::what() const noexcept {
+const char* BadInputDataException::what() const noexcept {
     return _msg.c_str();
 }

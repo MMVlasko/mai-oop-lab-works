@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <point.h>
 
 Point::Point() : x(0.), y(0.) {}
@@ -30,6 +32,10 @@ bool Point::operator==(Point &other) {
 
 bool Point::operator!=(Point &other) {
     return x != other.x || y != other.y;
+}
+
+double Point::distance(Point &other) {
+    return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 }
 
 std::ostream& operator<<(std::ostream &os, Point &point) {

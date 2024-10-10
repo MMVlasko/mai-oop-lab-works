@@ -23,32 +23,32 @@ class ArrayIsEmptyException : public std::exception {
         const char* what() const noexcept override;
 };
 
-class ResultIsNegativeException : public std::exception {
+class NotImplementedException : public std::exception {
     private:
         std::string _msg;
     
     public:
-        ResultIsNegativeException(std::string msg);
+        NotImplementedException(std::string msg);
 
         const char* what() const noexcept override;
 };
 
-class NoHexNumericException : public std::exception {
+class UninitializedException : public std::exception {
     private:
         std::string _msg;
     
     public:
-        NoHexNumericException(std::string msg);
+        UninitializedException(std::string msg);
 
         const char* what() const noexcept override;
 };
 
-class TooBigNumberException : public std::exception {
+class BadInputDataException : public std::exception {
     private:
         std::string _msg;
     
     public:
-        TooBigNumberException(std::string msg);
+        BadInputDataException(std::string msg);
 
         const char* what() const noexcept override;
 };

@@ -1,28 +1,72 @@
 #include <iostream>
 
 #include <figure.h>
+#include <tools.h>
+
+Figure::Figure() {
+    _name = "uninitialized";
+    _crds = nullptr;
+}
 
 Figure::Figure(std::initializer_list<Point*> t) {
-    _crds = new Array<Point>();
+    _name = "Figure";
+    Array<Point> crds = Array<Point>();
     for (Point* point: t)
-        _crds->add(point);
+        crds.add(point);
+    _crds = sort_points(crds);
+}
+
+Figure::Figure(const Figure &other) {
+    _name = "Figure";
+    _crds = new Array<Point>(*other._crds);
+}
+
+Figure::Figure(Figure &&other) noexcept {
+    _name = "Figure";
+    _crds = other._crds;
+    other._crds = nullptr;
 }
 
 Figure::~Figure() noexcept {
-    _crds->free_elements();
-    delete _crds;
+    if (_crds != nullptr) {
+        _crds->free_elements();
+        delete _crds;
+    }
 }
 
-bool Figure::operator==(Figure &other)  {
+Figure& Figure::operator=(const Figure &other) {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
+    if (this != &other) {
+        _crds->free_elements();
+        delete _crds;
+
+        _name = other._name;
+        _crds = new Array<Point>(*other._crds);
+    }
+    return *this;
+}
+
+Figure& Figure::operator=(Figure &&other) noexcept {
+    if (this != &other && _crds != nullptr) {
+        _crds->free_elements();
+        delete _crds;
+
+        _name = other._name;
+        _crds = other._crds;
+        other._crds = nullptr;
+    }
+    return *this;
+}
+
+bool Figure::operator==(Figure &other) {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
     if (other._crds->size == _crds->size) {
         for (int i = 0; i < _crds->size; ++i) {
-            bool flag = false;
-            for (int j = 0; j < _crds->size; ++j)
-                if (*(*_crds)[i] == *(*other._crds)[j]) {
-                    flag = true;
-                    break;
-                }
-            if (!flag)
+            if (*(*other._crds)[i] != *(*_crds)[i])
                 return false;
         }
         return true;
@@ -31,16 +75,13 @@ bool Figure::operator==(Figure &other)  {
 }
 
 bool Figure::operator!=(Figure &other)  {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
     if (other._crds->size == _crds->size) {
         for (int i = 0; i < _crds->size; ++i) {
-            bool flag = false;
-            for (int j = 0; j < _crds->size; j++)
-                if (_crds[i] == other._crds[j]) {
-                    flag = true;
-                    break;
-                }
-            if (!flag)
-                return true;
+            if (*(*other._crds)[i] != *(*_crds)[i])
+                return false;
         }
         return false;
     }
@@ -48,19 +89,51 @@ bool Figure::operator!=(Figure &other)  {
 }
 
 std::ostream& operator<<(std::ostream &os, Figure &figure) {
-    os << *figure._crds;
+    if (figure._crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
+    os << figure._name << " " << *figure._crds;
     return os;
 }
 
 Array<Point> *Figure::get_crds_array() {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
     return new Array<Point>(*_crds);
 }
 
-Figure::Figure(const Figure &other) {
-    _crds = new Array<Point>(*other._crds);
+std::string Figure::get_name() {
+    return _name;
 }
 
-Figure::Figure(Figure &&other) noexcept {
-    _crds = other._crds;
-    other._crds = nullptr;
+Point* Figure::get_center() {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
+    Array<Point> tr_centers = Array<Point>();
+    for (int i = 0; i < _crds->size - 2; ++i)
+        tr_centers.add(new Point(((*_crds)[0]->x + (*_crds)[i + 1]->x + (*_crds)[i + 2]->x) / 3.0, ((*_crds)[0]->y + (*_crds)[i + 1]->y + (*_crds)[i + 2]->y) / 3.0));
+
+    Point *result = new Point();
+
+    for (int i = 0; i < tr_centers.size; ++i) {
+        result->x += tr_centers[i]->x;
+        result->y += tr_centers[i]->y;
+    }
+    result->x /= (double)tr_centers.size;
+    result->y /= (double)tr_centers.size;
+
+    return result;
+}
+
+Figure::operator double() const {
+    if (_crds == nullptr)
+        throw UninitializedException("Figure must be initialized with >>");
+
+    return get_square(*_crds);
+}
+
+std::istream& operator>>(std::istream& in, Figure& figure) {
+    throw NotImplementedException("Input not implemented");
 }

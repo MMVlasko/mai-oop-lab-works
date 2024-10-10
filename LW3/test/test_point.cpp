@@ -124,6 +124,19 @@ TEST(not_equal_operator, test)
     ASSERT_TRUE(first_point != second_point);
 }
 
+TEST(distance, test)
+{
+    auto first = Point(1, 1);
+    auto second = Point(4, 5);
+    auto expected_result = 5.;
+
+    auto first_result = first.distance(second);
+    auto second_result = second.distance(first);
+
+    ASSERT_EQ(first_result, expected_result);
+    ASSERT_EQ(second_result, expected_result);
+}
+
 int main(int argc, char **argv) { 
     testing::InitGoogleTest(&argc, argv); 
     return RUN_ALL_TESTS(); 
