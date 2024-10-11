@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include <tools.h>
+#include <exceptions.h>
 
 Array<Point> *sort_points(Array<Point> &points) {
     Array<Point> crds = Array<Point>(points);
@@ -46,4 +47,12 @@ double get_square(Array<Point> &points) {
     square *= 0.5;
 
     return square;
+}
+
+void check_cin() {
+    if (std::cin.fail()) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        throw BadInputDataException("Incorrect input");
+    }
 }

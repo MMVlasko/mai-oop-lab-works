@@ -6,3 +6,5 @@
 Array<Point> *sort_points(Array<Point> &points);
 
 double get_square(Array<Point> &points);
+
+void check_cin();

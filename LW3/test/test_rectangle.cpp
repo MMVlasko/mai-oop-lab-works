@@ -4,24 +4,24 @@
 
 #include <exceptions.h>
 #include <array.h>
-#include <square.h>
+#include <rectangle.h>
 #include <point.h>
 
 TEST(init_list_constructor, test)
 {
     auto *first_point = new Point(1.0, 1.0);
-    auto *second_point = new Point(2.0, 2.0);
+    auto *second_point = new Point(3.0, 2.0);
     auto *third_point = new Point(1.0, 2.0);
-    auto *fourth_point = new Point(2.0, 1.0);
+    auto *fourth_point = new Point(3.0, 1.0);
 
     auto *bad_point = new Point(1000.0, 1000.0);
 
     auto expected_result = Array({first_point, fourth_point, second_point, third_point});
-    auto square = Square({first_point, second_point, third_point, fourth_point});
+    auto square = Rectangle({first_point, second_point, third_point, fourth_point});
 
     auto *result = square.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
-    ASSERT_THROW(Square({first_point, second_point, third_point, bad_point}), BadInputDataException);
+    ASSERT_THROW(Rectangle({first_point, second_point, third_point, bad_point}), BadInputDataException);
 
     result->free_elements();
     delete result;
@@ -40,14 +40,14 @@ TEST(input, test)
 
     std::cin.rdbuf(input.rdbuf());
 
-    Square square;
-    std::cin >> square;
+    Rectangle rectangle;
+    std::cin >> rectangle;
     
     auto expected_result = Array({first_point, fourth_point, second_point, third_point});
-    auto *result = square.get_crds_array();
+    auto *result = rectangle.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
-    
-    Square bad;
+
+    Rectangle bad;
     ASSERT_THROW(std::cin >> bad, BadInputDataException);
 
     result->free_elements();

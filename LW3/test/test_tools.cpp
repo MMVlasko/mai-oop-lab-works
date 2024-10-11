@@ -38,6 +38,20 @@ TEST(get_square, test)
     array.free_elements();
 }
 
+TEST(input, test)
+{
+    std::istringstream input("abcde");
+    std::streambuf* original_cin = std::cin.rdbuf();
+
+    std::cin.rdbuf(input.rdbuf());
+
+    double value;
+    std::cin >> value;
+    ASSERT_THROW(check_cin(), BadInputDataException);
+
+    std::cin.rdbuf(original_cin); 
+}
+
 int main(int argc, char **argv) { 
     testing::InitGoogleTest(&argc, argv); 
     return RUN_ALL_TESTS(); 
