@@ -2,9 +2,9 @@
 
 #include "figure.h"
 
-class Square : public Figure {
+class Square final : public Figure {
     public:
-        Square() : Figure() {}
+        Square() = default;
         Square(std::initializer_list<Point*> t);
 
         friend std::istream& operator>>(std::istream& in, Square &square);

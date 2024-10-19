@@ -2,9 +2,9 @@
 
 #include "figure.h"
 
-class Rectangle : public Figure {
+class Rectangle final : public Figure {
     public:
-        Rectangle() : Figure() {}
+        Rectangle() = default;
         Rectangle(std::initializer_list<Point*> t);
 
         friend std::istream& operator>>(std::istream& in, Rectangle &rectangle);

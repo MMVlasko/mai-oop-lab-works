@@ -20,7 +20,7 @@ TEST(init_list_constructor, test)
 {
     auto expected_size = 4;
     auto init_list = {new int(1), new int(1), new int(1), new int(1)};
-    auto array = Array<int>(init_list);
+    auto array = Array(init_list);
 
     ASSERT_EQ(array.size, expected_size);
 
@@ -36,7 +36,7 @@ TEST(init_list_constructor, test)
 TEST(index_operator, test_simple_array)
 {
     auto init_list = {new int(1)};
-    auto array = Array<int>(init_list);
+    auto array = Array(init_list);
 
     ASSERT_EQ(array[0], *init_list.begin());
     ASSERT_EQ(array[-1], *init_list.begin());
@@ -54,8 +54,8 @@ TEST(index_operator, test_empty_array)
 TEST(copy_constructor, test)
 {
     auto init_list = {new int(1), new int(2), new int(3), new int(4)};
-    auto array = Array<int>(init_list);
-    auto other_array = Array<int>(array);
+    auto array = Array(init_list);
+    auto other_array = Array(array);
 
     ASSERT_EQ(other_array.size, array.size);
 
@@ -70,7 +70,7 @@ TEST(move_constructor, test)
 {
     auto expected_size = 4;
     auto init_list = {new int(1), new int(2), new int(3), new int(4)};
-    auto array = Array<int>(Array<int>(init_list));
+    auto array = Array(Array(init_list));
 
     ASSERT_EQ(array.size, expected_size);
 
@@ -86,9 +86,9 @@ TEST(move_constructor, test)
 TEST(assignment_operator, test)
 {
     auto first_init_list = {new int(1), new int(2), new int(3), new int(4)};
-    auto first_array = Array<int>(first_init_list);
+    auto first_array = Array(first_init_list);
     auto second_init_list = {new int(5), new int(6), new int(7), new int(8), new int(9)};
-    auto second_array = Array<int>(second_init_list);
+    auto second_array = Array(second_init_list);
     first_array = second_array;
 
     ASSERT_EQ(first_array.size, second_array.size);
@@ -123,7 +123,7 @@ TEST(move_assignment_operator, test)
 TEST(destructor, test) 
 {
     auto init_list = {new int(1)};
-    auto *array = new Array<int>(init_list);
+    auto *array = new Array(init_list);
 
     ASSERT_EQ((*array)[0], *init_list.begin());
 
@@ -134,7 +134,7 @@ TEST(destructor, test)
 TEST(free_elements, test) 
 {
     auto init_list = {new int(1), new int(2)};
-    auto *array = new Array<int>(init_list);
+    auto *array = new Array(init_list);
 
     ASSERT_EQ((*array)[0], *init_list.begin());
 
@@ -152,10 +152,10 @@ TEST(remove, test_empty_array)
 TEST(remove, test_simple_array)
 {
     auto expected_size = 3;
-    auto expected_number = new int(4);
+    auto *expected_number = new int(4);
     auto init_list = {new int(1), new int(2), new int(3), expected_number};
 
-    auto array = Array<int>(init_list); 
+    auto array = Array(init_list);
     auto element = array.remove();
 
     ASSERT_EQ(element, expected_number);
@@ -167,7 +167,7 @@ TEST(remove, test_simple_array)
 TEST(add, test) 
 {
     auto expected_size = 1;
-    auto element = new int(333);
+    auto *element = new int(333);
 
     auto array = Array<int>();
     array.add(element);
@@ -213,9 +213,9 @@ TEST(not_equal_operator, test)
 TEST(insert, test_simple_array)
 {
     auto insert_index = 1;
-    auto first = new int(1);
+    auto *first = new int(1);
     auto insert_number = new int(333);
-    auto second = new int(2);
+    auto *second = new int(2);
 
     auto first_init_list = {first, second};
     auto second_init_list = {first, insert_number, second};
@@ -233,7 +233,7 @@ TEST(insert, test_simple_array)
 TEST(insert, test_empty_array)
 {
     auto insert_index = 0;
-    auto insert_number = new int(1);
+    auto *insert_number = new int(1);
     auto init_list = {insert_number};
 
     auto array = Array<int>();
@@ -248,7 +248,7 @@ TEST(insert, test_empty_array)
 
 TEST(pop, test)
 {
-    auto expected_number = new int(2);
+    auto *expected_number = new int(2);
     auto init_list = {new int(1), expected_number, new int(3), new int(4)};
     auto expected_size = 3;
     
@@ -267,7 +267,7 @@ TEST(print, test)
 {
     auto init_list = {new int(1), new int(2), new int(3), new int(4)};;
     auto result = "[1, 2, 3, 4]";
-    auto array = Array<int>(init_list);
+    auto array = Array(init_list);
 
     testing::internal::CaptureStdout();
     std::cout << array;

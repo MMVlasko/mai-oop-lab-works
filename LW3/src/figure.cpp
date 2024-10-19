@@ -8,9 +8,9 @@ Figure::Figure() {
     _crds = nullptr;
 }
 
-Figure::Figure(std::initializer_list<Point*> t) {
+Figure::Figure(const std::initializer_list<Point*> t) {
     _name = "Figure";
-    Array<Point> crds = Array<Point>();
+    auto crds = Array<Point>();
     for (Point* point: t)
         crds.add(point);
     _crds = sort_points(crds);
@@ -18,7 +18,7 @@ Figure::Figure(std::initializer_list<Point*> t) {
 
 Figure::Figure(const Figure &other) {
     _name = "Figure";
-    _crds = new Array<Point>(*other._crds);
+    _crds = new Array(*other._crds);
 }
 
 Figure::Figure(Figure &&other) noexcept {
@@ -43,7 +43,7 @@ Figure& Figure::operator=(const Figure &other) {
         delete _crds;
 
         _name = other._name;
-        _crds = new Array<Point>(*other._crds);
+        _crds = new Array(*other._crds);
     }
     return *this;
 }
@@ -60,7 +60,7 @@ Figure& Figure::operator=(Figure &&other) noexcept {
     return *this;
 }
 
-bool Figure::operator==(Figure &other) {
+bool Figure::operator==(const Figure &other) const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
@@ -74,7 +74,7 @@ bool Figure::operator==(Figure &other) {
     return false;
 }
 
-bool Figure::operator!=(Figure &other)  {
+bool Figure::operator!=(const Figure &other) const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
@@ -88,7 +88,7 @@ bool Figure::operator!=(Figure &other)  {
     return true;
 }
 
-std::ostream& operator<<(std::ostream &os, Figure &figure) {
+std::ostream& operator<<(std::ostream &os, const Figure &figure) {
     if (figure._crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
@@ -96,7 +96,7 @@ std::ostream& operator<<(std::ostream &os, Figure &figure) {
     return os;
 }
 
-Array<Point> *Figure::get_crds_array() {
+Array<Point> *Figure::get_crds_array() const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
@@ -107,7 +107,7 @@ std::string Figure::get_name() {
     return _name;
 }
 
-Point* Figure::get_center() {
+Point* Figure::get_center() const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
@@ -115,14 +115,14 @@ Point* Figure::get_center() {
     for (int i = 0; i < _crds->size - 2; ++i)
         tr_centers.add(new Point(((*_crds)[0]->x + (*_crds)[i + 1]->x + (*_crds)[i + 2]->x) / 3.0, ((*_crds)[0]->y + (*_crds)[i + 1]->y + (*_crds)[i + 2]->y) / 3.0));
 
-    Point *result = new Point();
+    auto *result = new Point();
 
     for (int i = 0; i < tr_centers.size; ++i) {
         result->x += tr_centers[i]->x;
         result->y += tr_centers[i]->y;
     }
-    result->x /= (double)tr_centers.size;
-    result->y /= (double)tr_centers.size;
+    result->x /= static_cast<double>(tr_centers.size);
+    result->y /= static_cast<double>(tr_centers.size);
 
     return result;
 }

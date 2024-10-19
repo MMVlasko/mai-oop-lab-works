@@ -26,19 +26,19 @@ class Figure {
 
         Figure &operator=(Figure &&other) noexcept;
 
-        bool operator==(Figure &other);
+        bool operator==(const Figure &other) const;
 
-        bool operator!=(Figure &other);
+        bool operator!=(const Figure &other) const;
 
-        friend std::ostream& operator<<(std::ostream &os, Figure &figure);
+        friend std::ostream& operator<<(std::ostream &os, const Figure &figure);
 
-        Array<Point> *get_crds_array();
+        Array<Point> *get_crds_array() const;
 
         std::string get_name();
 
-        Point *get_center();
+        Point *get_center() const;
 
-        operator double() const;
+        explicit operator double() const;
 
         friend std::istream& operator>>(std::istream& in, Figure& figure);
 };

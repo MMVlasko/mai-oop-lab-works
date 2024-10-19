@@ -19,11 +19,11 @@ class Point {
 
         Point &operator=(Point &&other) noexcept;
 
-        bool operator==(Point &other);
+        bool operator==(const Point &other) const;
 
-        bool operator!=(Point &other);
+        bool operator!=(const Point &other) const;
 
-        double distance(Point &other);
+        double distance(const Point &other) const;
 
-        friend std::ostream& operator<<(std::ostream &os, Point &point);
+        friend std::ostream& operator<<(std::ostream &os, const Point &point);
 };

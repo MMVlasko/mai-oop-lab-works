@@ -4,10 +4,10 @@
 #include <exceptions.h>
 
 Array<Point> *sort_points(Array<Point> &points) {
-    Array<Point> crds = Array<Point>(points);
-    Array<Point> *res = new Array<Point>();
+    auto crds = Array(points);
+    auto *res = new Array<Point>();
 
-    Point *_min = crds[0];
+    const Point *_min = crds[0];
     int min_i = 0;
 
     for (int i = 0; i < crds.size; ++i)
@@ -19,7 +19,7 @@ Array<Point> *sort_points(Array<Point> &points) {
     res->add(crds.pop(min_i));
 
     while (crds.size) {
-        Point *min_point = crds[0];
+        const Point *min_point = crds[0];
         double min = 10.;
         min_i = 0;
 

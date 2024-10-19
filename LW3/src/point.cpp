@@ -4,9 +4,9 @@
 
 Point::Point() : x(0.), y(0.) {}
 
-Point::Point(double ix, double iy) : x(ix), y(iy) {}
+Point::Point(const double x, const double y) : x(x), y(y) {}
 
-Point::Point(const Point &other) : x(other.x), y(other.y) {}
+Point::Point(const Point &other) = default;
 
 Point::Point(Point &&other) noexcept : x(other.x), y(other.y) {}
 
@@ -26,19 +26,19 @@ Point& Point::operator=(Point &&other) noexcept {
     return *this;
 }
 
-bool Point::operator==(Point &other) {
+bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
 
-bool Point::operator!=(Point &other) {
+bool Point::operator!=(const Point &other) const {
     return x != other.x || y != other.y;
 }
 
-double Point::distance(Point &other) {
+double Point::distance(const Point &other) const {
     return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 }
 
-std::ostream& operator<<(std::ostream &os, Point &point) {
+std::ostream& operator<<(std::ostream &os, const Point &point) {
     os << '(' << point.x << ", " << point.y << ')';
     return os;
 }

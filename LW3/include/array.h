@@ -1,13 +1,13 @@
 #pragma once
 
-#include <stddef.h>
+#include <cstddef>
 #include <initializer_list>
 #include <iostream>
 #include <cstring>
 
 #include "exceptions.h"
 
-template <class T> class Array {
+template <class T> class Array final {
     private:
         T* *_elements;
         size_t _capacity;
@@ -23,17 +23,17 @@ template <class T> class Array {
 
         Array(std::initializer_list<T*> t);
 
-        Array(const Array<T> &other);
+        Array(const Array &other);
 
-        Array(Array<T> &&other) noexcept;
+        Array(Array &&other) noexcept;
 
-        Array<T> &operator=(const Array<T> &other);
+        Array &operator=(const Array &other);
 
-        Array<T> &operator=(Array<T> &&other) noexcept;
+        Array &operator=(Array &&other) noexcept;
 
         T* operator[](int index);
 
-        virtual ~Array() noexcept;
+        ~Array() noexcept;
 
         void free_elements();
 
@@ -41,9 +41,9 @@ template <class T> class Array {
 
         void add(T* element);
 
-        bool operator==(Array<T> &other);
+        bool operator==(Array &other);
 
-        bool operator!=(Array<T> &other);
+        bool operator!=(Array &other);
 
         void insert(T* element, size_t index);
 
@@ -70,7 +70,7 @@ Array<T>::Array(std::initializer_list<T*> t) {
 }
  
 template <class T>
-Array<T>::Array(const Array<T> &other) { 
+Array<T>::Array(const Array &other) {
     _capacity = other._capacity; 
     size = other.size;
     _elements = new T*[_capacity]; 
@@ -79,7 +79,7 @@ Array<T>::Array(const Array<T> &other) {
 } 
  
 template <class T>
-Array<T>::Array(Array<T> &&other) noexcept : _elements{nullptr}, _capacity{0} { 
+Array<T>::Array(Array &&other) noexcept : _elements{nullptr}, _capacity{0} {
     _elements = other._elements; 
     _capacity = other._capacity; 
     size = other.size;
@@ -88,7 +88,7 @@ Array<T>::Array(Array<T> &&other) noexcept : _elements{nullptr}, _capacity{0} {
 } 
 
 template <class T>
-Array<T>& Array<T>::operator=(const Array<T> &other) { 
+Array<T>& Array<T>::operator=(const Array &other) {
     if (this != &other) { 
         delete[] _elements;
 
@@ -102,7 +102,7 @@ Array<T>& Array<T>::operator=(const Array<T> &other) {
 } 
 
 template <class T>
-Array<T>& Array<T>::operator=(Array<T> &&other) noexcept { 
+Array<T>& Array<T>::operator=(Array &&other) noexcept {
     if (this != &other) { 
         delete[] _elements;
         _elements = other._elements; 
@@ -122,14 +122,12 @@ T* Array<T>::operator[] (int index) {
 
     if (index < 0)
         return _elements[index + static_cast<int>(size)];
-
-    else return _elements[index];
+    return _elements[index];
 }
 
 template <class T>
-Array<T>::~Array() noexcept { 
-    if (_elements != nullptr)
-        delete[] _elements;
+Array<T>::~Array() noexcept {
+    delete[] _elements;
 }
 
 template <class T>
@@ -148,14 +146,13 @@ T* Array<T>::remove() {
 }
 
 template <class T>
-void Array<T>::_expand(size_t capacity) {
+void Array<T>::_expand(const size_t capacity) {
     _capacity = capacity;
     T* *temp = new T*[_capacity];
 
     for (int i = 0; i < size; ++i)
         temp[i] = _elements[i];
-            
-    // delete[] _elements;
+
     _elements = temp;
 }
 
@@ -169,7 +166,7 @@ void Array<T>::add(T* element) {
 }
 
 template <class T>
-bool Array<T>::operator==(Array<T> &other) {
+bool Array<T>::operator==(Array &other) {
     if (other.size == size) {
         for (int i = 0; i < size; ++i) {
             T *first = _elements[i];
@@ -183,7 +180,7 @@ bool Array<T>::operator==(Array<T> &other) {
 }
 
 template <class T>
-bool Array<T>::operator!=(Array<T> &other) {
+bool Array<T>::operator!=(Array &other) {
     if (other.size == size) {
         for (int i = 0; i < size; ++i) {
             T *first = _elements[i];
@@ -220,7 +217,7 @@ T* Array<T>::pop(size_t index) {
 
     T *temp = _elements[index];
 
-    for (int i = index + 1; i < size; ++i) 
+    for (size_t i = index + 1; i < size; ++i)
         _elements[i - 1] = _elements[i];
     
     --size;

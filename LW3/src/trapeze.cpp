@@ -4,20 +4,21 @@
 Trapeze::Trapeze(std::initializer_list<Point*> t) {
     if (t.size() != 4)
         throw BadInputDataException("Expected four points");
-    
-    Array<Point> crds = Array<Point>();
+
+    auto crds = Array<Point>();
     for (Point* point: t)
         crds.add(point);
     _crds = sort_points(crds);
-    
-    auto p0 = (*_crds)[0];
-    auto p1 = (*_crds)[1];
-    auto p2 = (*_crds)[2];
-    auto p3 = (*_crds)[3];
 
-    bool is_trapeze = (p1->x - p0->x) / (p2->x - p3->x) == (p1->y - p0->y) / (p2->y - p3->y) || (p1->x - p2->x) / (p3->x - p0->x) == (p2->y - p1->y) / (p3->y - p0->y);
-    
-    
+    const auto p0 = (*_crds)[0];
+    const auto p1 = (*_crds)[1];
+    const auto p2 = (*_crds)[2];
+    const auto p3 = (*_crds)[3];
+
+    bool is_trapeze = (p1->x - p0->x) / (p2->x - p3->x) == (p1->y - p0->y) / (p2->y - p3->y) ||
+        (p1->x - p2->x) / (p3->x - p0->x) == (p2->y - p1->y) / (p3->y - p0->y);
+
+
     if (!is_trapeze) {
         _crds->free_elements();
             delete _crds;
@@ -29,29 +30,29 @@ Trapeze::Trapeze(std::initializer_list<Point*> t) {
 }
 
 std::istream& operator>>(std::istream& in, Trapeze& trapeze) {
-    Point *first_point = new Point();
+    auto *first_point = new Point();
     in >> first_point->x >> first_point->y;
     check_cin();
 
-    Point *second_point = new Point();
+    auto *second_point = new Point();
     in >> second_point->x >> second_point->y;
     check_cin();
 
-    Point *third_point = new Point();
+    auto *third_point = new Point();
     in >> third_point->x >> third_point->y;
     check_cin();
 
-    Point *fourth_point = new Point();
+    auto *fourth_point = new Point();
     in >> fourth_point->x >> fourth_point->y;
     check_cin();
 
-    Array<Point> crds = Array<Point>({first_point, second_point, third_point, fourth_point});
+    auto crds = Array({first_point, second_point, third_point, fourth_point});
     trapeze._crds = sort_points(crds);
 
-    auto p0 = (*trapeze._crds)[0];
-    auto p1 = (*trapeze._crds)[1];
-    auto p2 = (*trapeze._crds)[2];
-    auto p3 = (*trapeze._crds)[3];
+    const auto p0 = (*trapeze._crds)[0];
+    const auto p1 = (*trapeze._crds)[1];
+    const auto p2 = (*trapeze._crds)[2];
+    const auto p3 = (*trapeze._crds)[3];
 
     auto first_dif_x = std::abs(p1->x - p0->x);
     auto sec_dif_x = std::abs(p2->x - p3->x);
