@@ -100,7 +100,7 @@ Array<Point> *Figure::get_crds_array() const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
-    return new Array<Point>(*_crds);
+    return new Array(*_crds);
 }
 
 std::string Figure::get_name() {
@@ -111,9 +111,10 @@ Point* Figure::get_center() const {
     if (_crds == nullptr)
         throw UninitializedException("Figure must be initialized with >>");
 
-    Array<Point> tr_centers = Array<Point>();
+    auto tr_centers = Array<Point>();
     for (int i = 0; i < _crds->size - 2; ++i)
-        tr_centers.add(new Point(((*_crds)[0]->x + (*_crds)[i + 1]->x + (*_crds)[i + 2]->x) / 3.0, ((*_crds)[0]->y + (*_crds)[i + 1]->y + (*_crds)[i + 2]->y) / 3.0));
+        tr_centers.add(new Point(((*_crds)[0]->x + (*_crds)[i + 1]->x + (*_crds)[i + 2]->x) / 3.0,
+            ((*_crds)[0]->y + (*_crds)[i + 1]->y + (*_crds)[i + 2]->y) / 3.0));
 
     auto *result = new Point();
 

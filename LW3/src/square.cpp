@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <square.h>
 #include <tools.h>
 

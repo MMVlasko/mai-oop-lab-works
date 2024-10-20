@@ -17,9 +17,9 @@ TEST(init_list_constructor, test)
     auto *bad_point = new Point(1000.0, 1000.0);
 
     auto expected_result = Array({first_point, fourth_point, second_point, third_point});
-    auto square = Rectangle({first_point, second_point, third_point, fourth_point});
+    auto rectangle = Rectangle({first_point, second_point, third_point, fourth_point});
 
-    auto *result = square.get_crds_array();
+    auto *result = rectangle.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
     ASSERT_THROW(Rectangle({first_point, second_point, third_point, bad_point}), BadInputDataException);
 

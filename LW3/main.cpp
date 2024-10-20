@@ -1,4 +1,5 @@
 #include <limits>
+#include <iostream>
 
 #include <array.h>
 #include <rectangle.h>

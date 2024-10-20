@@ -1,4 +1,5 @@
 #include <cmath>
+#include <ostream>
 
 #include <point.h>
 

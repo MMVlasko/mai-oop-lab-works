@@ -2,8 +2,7 @@
 
 #include <cstddef>
 #include <initializer_list>
-#include <iostream>
-#include <cstring>
+#include <ostream>
 
 #include "exceptions.h"
 

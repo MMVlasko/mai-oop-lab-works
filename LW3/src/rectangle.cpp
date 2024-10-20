@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <rectangle.h>
 #include <tools.h>
 

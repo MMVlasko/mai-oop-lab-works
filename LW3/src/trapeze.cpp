@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <trapeze.h>
 #include <tools.h>
 
