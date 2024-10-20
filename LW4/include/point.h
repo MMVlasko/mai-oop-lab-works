@@ -2,8 +2,12 @@
 
 #include <iostream>
 #include <cmath>
+#include <type_traits>
 
-template <class T> class Point {
+template <class T>
+concept Scalar = std::is_scalar_v<T>;
+
+template <Scalar T> class Point {
     public:
         T x, y;
 
@@ -31,19 +35,19 @@ template <class T> class Point {
 };
 
 
-template <class T>
+template <Scalar T>
 Point<T>::Point() : x(static_cast<T>(0)), y(static_cast<T>(0)) {}
 
-template <class T>
+template <Scalar T>
 Point<T>::Point(const T x, const T y) : x(x), y(y) {}
 
-template <class T>
+template <Scalar T>
 Point<T>::Point(const Point &other) = default;
 
-template <class T>
+template <Scalar T>
 Point<T>::Point(Point &&other) noexcept : x(other.x), y(other.y) {}
 
-template <class T>
+template <Scalar T>
 Point<T>& Point<T>::operator=(const Point &other) {
     if (this != &other) {
         x = other.x;
@@ -52,7 +56,7 @@ Point<T>& Point<T>::operator=(const Point &other) {
     return *this;
 }
 
-template <class T>
+template <Scalar T>
 Point<T>& Point<T>::operator=(Point &&other) noexcept {
     if (this != &other) {
         x = other.x;
@@ -61,22 +65,22 @@ Point<T>& Point<T>::operator=(Point &&other) noexcept {
     return *this;
 }
 
-template <class T>
+template <Scalar T>
 bool Point<T>::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
 
-template <class T>
+template <Scalar T>
 bool Point<T>::operator!=(const Point &other) const {
     return x != other.x || y != other.y;
 }
 
-template <class T>
+template <Scalar T>
 double Point<T>::distance(const Point &other) const {
     return std::sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
 }
 
-template <class T>
+template <Scalar T>
 std::ostream& operator<<(std::ostream &os, const Point<T> &point) {
     os << '(' << point.x << ", " << point.y << ')';
     return os;

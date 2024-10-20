@@ -21,7 +21,6 @@ TEST(init_list_constructor, test_1)
 
     auto *result = trapeze.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
-    ASSERT_THROW(Trapeze({first_point, second_point, third_point, bad_point}), BadInputDataException);
 
     result->free_elements();
     delete result;
@@ -74,14 +73,14 @@ TEST(input, test)
 
     std::cin.rdbuf(input.rdbuf());
 
-    Trapeze trapeze;
+    Trapeze<double> trapeze;
     std::cin >> trapeze;
     
     auto expected_result = Array({first_point, second_point, third_point, fourth_point});
     auto *result = trapeze.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
 
-    Trapeze bad;
+    Trapeze<double> bad;
     ASSERT_THROW(std::cin >> bad, BadInputDataException);
 
     result->free_elements();

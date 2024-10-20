@@ -4,10 +4,11 @@
 #include <array.h>
 #include <figure.h>
 #include <point.h>
+#include <tools.h>
 
 TEST(empty_constructor, test)
 {
-    auto figure = Figure();
+    auto figure = Figure<int>();
     ASSERT_THROW(figure.get_crds_array(), UninitializedException);
 }
 
@@ -32,8 +33,8 @@ TEST(copy_constructor, test)
     auto *first_point = new Point(1.0, 1.0);
     auto *second_point = new Point(1.0, 2.0);
     auto *third_point = new Point(2.0, 1.0);
-    auto *first_figure = new Figure({first_point, second_point, third_point});
-    auto *second_figure = new Figure(*first_figure);
+    auto *first_figure = new Figure<double>({first_point, second_point, third_point});
+    auto *second_figure = new Figure<double>(*first_figure);
 
     ASSERT_TRUE(*first_figure == *second_figure);
 
@@ -43,10 +44,10 @@ TEST(copy_constructor, test)
 
 TEST(move_constructor, test)
 {
-    auto *first_point = new Point(1.0, 1.0);
-    auto *second_point = new Point(2.0, 1.0);
-    auto *third_point = new Point(1.0, 2.0);
-    auto *figure = new Figure(Figure({first_point, second_point, third_point}));
+    auto *first_point = new Point(1, 1);
+    auto *second_point = new Point(2, 1);
+    auto *third_point = new Point(1, 2);
+    auto *figure = new Figure<int>(Figure({first_point, second_point, third_point}));
 
     auto *result = figure->get_crds_array();
     ASSERT_TRUE(*first_point == *(*result)[0]);
@@ -64,7 +65,7 @@ TEST(destructor, test)
     auto *second_point = new Point(1.0, 2.0);
 
     auto expected_result = Array({first_point, second_point});
-    auto *figure = new Figure({first_point, second_point});
+    auto *figure = new Figure<double>({first_point, second_point});
 
     auto *result = figure->get_crds_array();
     ASSERT_TRUE(*result == expected_result);
@@ -80,8 +81,8 @@ TEST(assignment_operator, test)
     auto *second_point = new Point(1.0, 2.0);
     auto *third_point = new Point(2.0, 1.0);
 
-    auto *first_figure = new Figure({first_point, second_point, third_point});
-    auto *second_figure = new Figure({new Point(*first_point)});
+    auto *first_figure = new Figure<double>({first_point, second_point, third_point});
+    auto *second_figure = new Figure({new Point<double>(*first_point)});
     *first_figure = *second_figure;
 
     ASSERT_TRUE(*first_figure == *second_figure);
@@ -92,12 +93,12 @@ TEST(assignment_operator, test)
 
 TEST(move_assignment_operator, test) 
 {
-    auto *first_point = new Point(1.0, 1.0);
-    auto *second_point = new Point(1.0, 2.0);
-    auto *third_point = new Point(2.0, 1.0);
+    auto *first_point = new Point(1, 1);
+    auto *second_point = new Point(1, 2);
+    auto *third_point = new Point(2, 1);
 
-    auto *figure = new Figure({new Point(*first_point), second_point, third_point});
-    *figure = Figure({new Point(*first_point)});;
+    auto *figure = new Figure({new Point<int>(*first_point), second_point, third_point});
+    *figure = Figure({new Point<int>(*first_point)});;
 
     auto *result = figure->get_crds_array();
     ASSERT_TRUE(result->size == 1);
@@ -110,12 +111,13 @@ TEST(move_assignment_operator, test)
 
 TEST(equal_operator, test)
 {
-    auto *first_point = new Point(1.0, 1.0);
-    auto *second_point = new Point(1.0, 2.0);
-    auto *third_point = new Point(2.0, 1.0);
-    auto *first_figure = new Figure({first_point, second_point, third_point});
-    auto *second_figure = new Figure({new Point(*first_point), new Point(*third_point), new Point(*second_point)});
-    auto *third_figure = new Figure({new Point(*second_point)});
+    auto *first_point = new Point(1, 1);
+    auto *second_point = new Point(1, 2);
+    auto *third_point = new Point(2, 1);
+    auto *first_figure = new Figure<int>({first_point, second_point, third_point});
+    auto *second_figure = new Figure({new Point<int>(*first_point), new Point<int>(*third_point),
+        new Point<int>(*second_point)});
+    auto *third_figure = new Figure({new Point<int>(*second_point)});
     
     ASSERT_TRUE(*first_figure == *second_figure);
     ASSERT_FALSE(*first_figure == *third_figure);
@@ -128,12 +130,13 @@ TEST(equal_operator, test)
 
 TEST(not_equal_operator, test)
 {
-    auto *first_point = new Point(1.0, 1.0);
-    auto *second_point = new Point(1.0, 2.0);
-    auto *third_point = new Point(2.0, 1.0);
-    auto *first_figure = new Figure({first_point, second_point, third_point});
-    auto *second_figure = new Figure({new Point(*first_point), new Point(*third_point), new Point(*second_point)});
-    auto *third_figure = new Figure({new Point(*second_point)});
+    auto *first_point = new Point(1, 1);
+    auto *second_point = new Point(1, 2);
+    auto *third_point = new Point(2, 1);
+    auto *first_figure = new Figure<int>({first_point, second_point, third_point});
+    auto *second_figure = new Figure({new Point<int>(*first_point), new Point<int>(*third_point),
+        new Point<int>(*second_point)});
+    auto *third_figure = new Figure({new Point<int>(*second_point)});
     
     ASSERT_FALSE(*first_figure != *second_figure);
     ASSERT_TRUE(*first_figure != *third_figure);
@@ -151,7 +154,7 @@ TEST(print, test)
     auto *second_point = new Point(2.0, 1.0);
     auto *third_point = new Point(1.0, 2.0);
 
-    auto *figure = new Figure({first_point, second_point, third_point});
+    auto *figure = new Figure<double>({first_point, second_point, third_point});
 
     testing::internal::CaptureStdout();
     std::cout << *figure;
@@ -188,7 +191,7 @@ TEST(get_name, test)
     auto expected_result = "Figure";
     auto *first_point = new Point(1.0, 1.0);
 
-    auto *figure = new Figure({first_point});
+    auto *figure = new Figure<double>({first_point});
 
     auto result = figure->get_name();
 
@@ -206,7 +209,7 @@ TEST(get_center, test)
 
     auto expected_result = Point(3.0, 2.0);
 
-    auto *figure = new Figure({first_point, second_point, third_point, fourth_point});
+    auto *figure = new Figure<double>({first_point, second_point, third_point, fourth_point});
     auto *result = figure->get_center();
     
     ASSERT_TRUE(*result == expected_result);
@@ -224,8 +227,8 @@ TEST(square, test)
 
     auto expected_result = 8.;
 
-    auto *figure = new Figure({first_point, second_point, third_point, fourth_point});
-    auto result = (double)*figure;
+    auto *figure = new Figure<double>({first_point, second_point, third_point, fourth_point});
+    auto result = static_cast<double>(*figure);
     
     ASSERT_EQ(result, expected_result);
 
@@ -234,7 +237,7 @@ TEST(square, test)
 
 TEST(input, test)
 {
-    Figure figure;
+    Figure<double> figure;
     ASSERT_THROW(std::cin >> figure, NotImplementedException);
 }
  

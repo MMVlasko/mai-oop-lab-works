@@ -40,14 +40,14 @@ TEST(input, test)
 
     std::cin.rdbuf(input.rdbuf());
 
-    Square square;
+    Square<double> square;
     std::cin >> square;
     
     auto expected_result = Array({first_point, fourth_point, second_point, third_point});
     auto *result = square.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
     
-    Square bad;
+    Square<double> bad;
     ASSERT_THROW(std::cin >> bad, BadInputDataException);
 
     result->free_elements();

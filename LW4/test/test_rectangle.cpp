@@ -40,14 +40,14 @@ TEST(input, test)
 
     std::cin.rdbuf(input.rdbuf());
 
-    Rectangle rectangle;
+    Rectangle<double> rectangle;
     std::cin >> rectangle;
     
     auto expected_result = Array({first_point, fourth_point, second_point, third_point});
     auto *result = rectangle.get_crds_array();
     ASSERT_TRUE(*result == expected_result);
 
-    Rectangle bad;
+    Rectangle<double> bad;
     ASSERT_THROW(std::cin >> bad, BadInputDataException);
 
     result->free_elements();

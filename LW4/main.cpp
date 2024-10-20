@@ -6,7 +6,7 @@
 #include <trapeze.h>
 
 int main() {
-    auto *figures = new Array<Figure>();
+    auto *figures = new Array<Figure<double>>();
     std::cout << "Type 'help' to get info" << std::endl;
 
     while (true) {
@@ -32,7 +32,7 @@ int main() {
             }
             
             else if (param == 1) {
-                auto *rectangle = new Rectangle();
+                auto *rectangle = new Rectangle<double>();
                 try {
                     std::cin >> *rectangle;
                     figures->add(rectangle);
@@ -43,7 +43,7 @@ int main() {
             }
 
             else if (param == 2) {
-                auto *square = new Square();
+                auto *square = new Square<double>();
                 try {
                     std::cin >> *square;
                     figures->add(square);
@@ -54,7 +54,7 @@ int main() {
             }
 
             else if (param == 3) {
-                auto *trapeze = new Trapeze();
+                auto *trapeze = new Trapeze<double>();
                 try {
                     std::cin >> *trapeze;
                     figures->add(trapeze);
@@ -97,7 +97,7 @@ int main() {
                 std::cout << "Некорректный ввод!" << std::endl;
             } else {
                 try {
-                    const Figure *poped = figures->pop(index);
+                    const Figure<double> *poped = figures->pop(index);
                     std::cout << *poped << " удалена" << std::endl;
                     delete poped;
                 } catch (IndexOutOfRangeException&) {

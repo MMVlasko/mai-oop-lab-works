@@ -18,17 +18,17 @@ FetchContent_MakeAvailable(googletest)
 
 add_library(LW4_array include/array.h)
 
-add_library(LW4_figure src/figure.cpp)
-target_include_directories(LW4_figure PRIVATE include)
+add_library(LW4_figure include/figure.h)
+set_target_properties(LW4_figure PROPERTIES LINKER_LANGUAGE CXX)
 
-add_library(LW4_square src/square.cpp)
-target_include_directories(LW4_square PRIVATE include)
+add_library(LW4_square include/square.h)
+set_target_properties(LW4_square PROPERTIES LINKER_LANGUAGE CXX)
 
-add_library(LW4_rectangle src/rectangle.cpp)
-target_include_directories(LW4_rectangle PRIVATE include)
+add_library(LW4_rectangle include/rectangle.h)
+set_target_properties(LW4_rectangle PROPERTIES LINKER_LANGUAGE CXX)
 
-add_library(LW4_trapeze src/trapeze.cpp)
-target_include_directories(LW4_trapeze PRIVATE include)
+add_library(LW4_trapeze include/trapeze.h)
+set_target_properties(LW4_trapeze PROPERTIES LINKER_LANGUAGE CXX)
 
 add_library(LW4_exceptions src/exceptions.cpp)
 target_include_directories(LW4_exceptions PRIVATE include)
@@ -36,7 +36,7 @@ target_include_directories(LW4_exceptions PRIVATE include)
 add_library(LW4_point include/point.h)
 set_target_properties(LW4_point PROPERTIES LINKER_LANGUAGE CXX)
 
-add_library(LW4_tools src/tools.cpp)
+add_library(LW4_tools src/tools.cpp include/tools.h)
 target_include_directories(LW4_tools PRIVATE include)
 
 add_executable(LW4 main.cpp)
