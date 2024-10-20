@@ -225,7 +225,7 @@ TEST(square, test)
     auto expected_result = 8.;
 
     auto *figure = new Figure({first_point, second_point, third_point, fourth_point});
-    auto result = (double)*figure;
+    auto result = static_cast<double>(*figure);
     
     ASSERT_EQ(result, expected_result);
 

@@ -72,8 +72,12 @@ int main() {
             if (!figures->size)
                 std::cout << "Список фигур пуст!" << std::endl;
             else {
-                for (int i = 0; i < figures->size; ++i)
-                    std::cout << *(*figures)[i] << " Площадь: " << static_cast<double>(*(*figures)[i]) << std::endl;
+                for (int i = 0; i < figures->size; ++i) {
+                    Point *center = (*figures)[i]->get_center();
+                    std::cout << *(*figures)[i] << " Площадь: " << static_cast<double>(*(*figures)[i]) <<
+                        " Центр: " << *center << std::endl;
+                    delete center;
+                }
             }
         }
 
