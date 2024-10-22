@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <cmath>
 #include <type_traits>
 
@@ -45,25 +44,13 @@ template <Scalar T>
 Point<T>::Point(const Point &other) = default;
 
 template <Scalar T>
-Point<T>::Point(Point &&other) noexcept : x(other.x), y(other.y) {}
+Point<T>::Point(Point &&other) noexcept = default;
 
 template <Scalar T>
-Point<T>& Point<T>::operator=(const Point &other) {
-    if (this != &other) {
-        x = other.x;
-        y = other.y;
-    }
-    return *this;
-}
+Point<T>& Point<T>::operator=(const Point &other) = default;
 
 template <Scalar T>
-Point<T>& Point<T>::operator=(Point &&other) noexcept {
-    if (this != &other) {
-        x = other.x;
-        y = other.y;
-    }
-    return *this;
-}
+Point<T>& Point<T>::operator=(Point &&other) noexcept = default;
 
 template <Scalar T>
 bool Point<T>::operator==(const Point &other) const {

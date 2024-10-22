@@ -3,10 +3,10 @@
 #include "tools.h"
 #include "figure.h"
 
-template <Scalar T> class Trapeze final : public Figure<T> {
+template <Scalar T> class Trapeze : public Figure<T> {
     public:
-        Trapeze() = default;
-        Trapeze(std::initializer_list<Point<T>*> t);
+        using Figure<T>::Figure;
+        Trapeze(std::initializer_list<Point<T>> t);
 
         template <Scalar U>
         friend std::istream& operator>>(std::istream& in, Trapeze<U> &trapeze);
@@ -14,12 +14,12 @@ template <Scalar T> class Trapeze final : public Figure<T> {
 
 
 template <Scalar T>
-Trapeze<T>::Trapeze(std::initializer_list<Point<T>*> t) {
+Trapeze<T>::Trapeze(std::initializer_list<Point<T>> t) {
     if (t.size() != 4)
         throw BadInputDataException("Expected four points");
 
     auto crds = Array<Point<T>>();
-    for (Point<T>* point: t)
+    for (Point<T> point: t)
         crds.add(point);
     this->_crds = sort_points<T>(crds);
 
@@ -43,32 +43,28 @@ Trapeze<T>::Trapeze(std::initializer_list<Point<T>*> t) {
             (first_dif_y == 0. && sec_dif_y == 0.) || (third_dif_x == 0. && fourth_dif_x == 0.) ||
             (third_dif_y == 0. && fourth_dif_y == 0.);
 
-    if (!is_trapeze) {
-        this->_crds->free_elements();
-            delete this->_crds;
-            this->_crds = nullptr;
-            throw BadInputDataException("Non-parallel sides!");
-    }
+    if (!is_trapeze)
+        throw BadInputDataException("Non-parallel sides!");
 
     this->_name = "Trapeze";
 }
 
 template <Scalar T>
 std::istream& operator>>(std::istream& in, Trapeze<T>& trapeze) {
-    auto *first_point = new Point<T>();
-    in >> first_point->x >> first_point->y;
+    auto first_point = Point<T>();
+    in >> first_point.x >> first_point.y;
     check_cin();
 
-    auto *second_point = new Point<T>();
-    in >> second_point->x >> second_point->y;
+    auto second_point = Point<T>();
+    in >> second_point.x >> second_point.y;
     check_cin();
 
-    auto *third_point = new Point<T>();
-    in >> third_point->x >> third_point->y;
+    auto third_point = Point<T>();
+    in >> third_point.x >> third_point.y;
     check_cin();
 
-    auto *fourth_point = new Point<T>();
-    in >> fourth_point->x >> fourth_point->y;
+    auto fourth_point = Point<T>();
+    in >> fourth_point.x >> fourth_point.y;
     check_cin();
 
     auto crds = Array({first_point, second_point, third_point, fourth_point});
@@ -94,12 +90,8 @@ std::istream& operator>>(std::istream& in, Trapeze<T>& trapeze) {
             (first_dif_y == 0. && sec_dif_y == 0.) || (third_dif_x == 0. && fourth_dif_x == 0.) ||
             (third_dif_y == 0. && fourth_dif_y == 0.);
 
-    if (!is_trapeze) {
-        trapeze._crds->free_elements();
-            delete trapeze._crds;
-            trapeze._crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
-    }
+    if (!is_trapeze)
+        throw BadInputDataException("Lengths of sides not equal");
 
     trapeze._name = "Trapeze";
 

@@ -1,4 +1,5 @@
 #include <limits>
+#include <iostream>
 
 #include <array.h>
 #include <rectangle.h>
@@ -6,7 +7,8 @@
 #include <trapeze.h>
 
 int main() {
-    auto *figures = new Array<Figure<double>>();
+    using type = double;
+    auto figures = std::make_shared<Array<Figure<type>>>(Array<Figure<type>>());
     std::cout << "Type 'help' to get info" << std::endl;
 
     while (true) {
@@ -14,11 +16,8 @@ int main() {
         std::string input;
         std::cin >> input;
 
-        if (input == "exit") {
-            figures->free_elements();
-            delete figures;
+        if (input == "exit")
             return 0;
-        }
 
         if (input == "input") {
             int param;
@@ -32,35 +31,32 @@ int main() {
             }
             
             else if (param == 1) {
-                auto *rectangle = new Rectangle<double>();
+                auto rectangle = Rectangle<double>();
                 try {
-                    std::cin >> *rectangle;
+                    std::cin >> rectangle;
                     figures->add(rectangle);
                 } catch (BadInputDataException&) {
                     std::cout << "Введённая фигура не является прямоугольником!" << std::endl;
-                    delete rectangle;
                 }
             }
 
             else if (param == 2) {
-                auto *square = new Square<double>();
+                auto square = Square<double>();
                 try {
-                    std::cin >> *square;
+                    std::cin >> square;
                     figures->add(square);
                 } catch (BadInputDataException&) {
                     std::cout << "Введённая фигура не является квадратом!" << std::endl;
-                    delete square;
                 }
             }
 
             else if (param == 3) {
-                auto *trapeze = new Trapeze<double>();
+                auto trapeze = Trapeze<double>();
                 try {
-                    std::cin >> *trapeze;
+                    std::cin >> trapeze;
                     figures->add(trapeze);
                 } catch (BadInputDataException&) {
                     std::cout << "Введённая фигура не является трапецией!" << std::endl;
-                    delete trapeze;
                 }
             }
 
@@ -72,7 +68,8 @@ int main() {
                 std::cout << "Список фигур пуст!" << std::endl;
             else {
                 for (int i = 0; i < figures->size; ++i)
-                    std::cout << *(*figures)[i] << " Площадь: " << static_cast<double>(*(*figures)[i]) << std::endl;
+                    std::cout << *(*figures)[i] << " Площадь: " << static_cast<double>(*(*figures)[i]) << " Центр: "
+                        << *(*figures)[i]->get_center() << std::endl;
             }
         }
 
@@ -97,9 +94,8 @@ int main() {
                 std::cout << "Некорректный ввод!" << std::endl;
             } else {
                 try {
-                    const Figure<double> *poped = figures->pop(index);
+                    auto poped = figures->pop(index);
                     std::cout << *poped << " удалена" << std::endl;
-                    delete poped;
                 } catch (IndexOutOfRangeException&) {
                     std::cout << "Элемент с указанным индексом не существвует!" << std::endl;
                 }

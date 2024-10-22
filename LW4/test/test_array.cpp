@@ -2,9 +2,9 @@
 
 #include <exceptions.h>
 #include <array.h>
+#include <complex>
 
-TEST(empty_constructor, test)
-{
+TEST(empty_constructor, test) {
     auto expected_size = 0;
     auto array = Array<int>();
 
@@ -14,25 +14,25 @@ TEST(empty_constructor, test)
 TEST(init_list_constructor, test)
 {
     auto expected_size = 4;
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(1), std::make_shared<int>(1), std::make_shared<int>(1)};
+    auto init_list = {1, 1, 1, 1};
     auto array = Array(init_list);
 
     ASSERT_EQ(array.size, expected_size);
 
     int i = 0;
     for (const auto& elem : init_list) {
-        ASSERT_EQ(array[i], elem);
+        ASSERT_EQ(*array[i], elem);
         ++i;
     }
 }
 
 TEST(index_operator, test_simple_array)
 {
-    auto init_list = {std::make_shared<int>(1)};
+    auto init_list = {1};
     auto array = Array(init_list);
 
-    ASSERT_EQ(array[0], *init_list.begin());
-    ASSERT_EQ(array[-1], *init_list.begin());
+    ASSERT_EQ(*array[0], *init_list.begin());
+    ASSERT_EQ(*array[-1], *init_list.begin());
     ASSERT_THROW(array[1], IndexOutOfRangeException);
 }
 
@@ -44,7 +44,7 @@ TEST(index_operator, test_empty_array)
 
 TEST(copy_constructor, test)
 {
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto init_list = {1, 2, 3, 4};
     auto array = Array(init_list);
     auto other_array = Array(array);
 
@@ -57,23 +57,23 @@ TEST(copy_constructor, test)
 TEST(move_constructor, test)
 {
     auto expected_size = 4;
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};;
+    auto init_list = {1, 2, 3, 4};
     auto array = Array(Array(init_list));
 
     ASSERT_EQ(array.size, expected_size);
 
     int i = 0;
     for (const auto& elem : init_list) {
-        ASSERT_EQ(array[i], elem);
+        ASSERT_EQ(*array[i], elem);
         ++i;
     }
 }
 
 TEST(assignment_operator, test)
 {
-    auto first_init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto first_init_list = {1, 2, 3, 4};
     auto first_array = Array(first_init_list);
-    auto second_init_list = {std::make_shared<int>(5), std::make_shared<int>(6), std::make_shared<int>(7), std::make_shared<int>(8), std::make_shared<int>(9)};
+    auto second_init_list = {5, 6, 7, 8, 9};
     auto second_array = Array(second_init_list);
     first_array = second_array;
 
@@ -84,8 +84,8 @@ TEST(assignment_operator, test)
 
 TEST(move_assignment_operator, test)
 {
-    auto first_init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
-    auto second_init_list = {std::make_shared<int>(5), std::make_shared<int>(6), std::make_shared<int>(7), std::make_shared<int>(8), std::make_shared<int>(9)};
+    auto first_init_list = {1, 2, 3, 4};
+    auto second_init_list = {5, 6, 7, 8, 9};
     auto expected_size = 5;
     
     auto array = Array(first_init_list);
@@ -95,7 +95,7 @@ TEST(move_assignment_operator, test)
     
     int i = 0;
     for (const auto& elem : second_init_list) {
-        ASSERT_EQ(array[i], elem);
+        ASSERT_EQ(*array[i], elem);
         ++i;
     }
 }
@@ -110,31 +110,31 @@ TEST(remove, test_empty_array)
 TEST(remove, test_simple_array)
 {
     auto expected_size = 3;
-    auto expected_number = std::make_shared<int>(4);
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), expected_number};
+    auto expected_number = 4;
+    auto init_list = {1, 2, 3, expected_number};
 
     auto array = Array(init_list);
     auto element = array.remove();
 
-    ASSERT_EQ(element, expected_number);
+    ASSERT_EQ(*element, expected_number);
     ASSERT_EQ(array.size, expected_size);
 }
 
 TEST(add, test) 
 {
     auto expected_size = 1;
-    auto element = std::make_shared<int>(333);
+    auto element = 333;
 
     auto array = Array<int>();
     array.add(element);
 
     ASSERT_EQ(array.size, expected_size);
-    ASSERT_EQ(array[0], element);
+    ASSERT_EQ(*array[0], element);
 }
 
 TEST(equal_operator, test)
 {
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto init_list = {1, 2, 3, 4};
 
     auto first_array = Array(init_list);
     auto sec_array = Array(init_list);
@@ -148,7 +148,7 @@ TEST(equal_operator, test)
 
 TEST(not_equal_operator, test)
 {
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto init_list = {1, 2, 3, 4};
 
     auto first_array = Array(init_list);
     auto sec_array = Array(init_list);
@@ -163,9 +163,9 @@ TEST(not_equal_operator, test)
 TEST(insert, test_simple_array)
 {
     auto insert_index = 1;
-    auto first = std::make_shared<int>(1);
-    auto insert_number = std::make_shared<int>(333);
-    auto second = std::make_shared<int>(2);
+    auto first = 1;
+    auto insert_number = 333;
+    auto second = 2;
 
     auto first_init_list = {first, second};
     auto second_init_list = {first, insert_number, second};
@@ -181,8 +181,8 @@ TEST(insert, test_simple_array)
 TEST(insert, test_empty_array)
 {
     auto insert_index = 0;
-    auto insert_number = std::make_shared<int>(1);
-    auto init_list = {insert_number};
+    auto insert_number = 1;
+    auto init_list = {1};
 
     auto array = Array<int>();
     auto new_array = Array(init_list);
@@ -194,8 +194,8 @@ TEST(insert, test_empty_array)
 
 TEST(pop, test)
 {
-    auto expected_number = std::make_shared<int>(2);
-    auto init_list = {std::make_shared<int>(1), expected_number, std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto expected_number = 2;
+    auto init_list = {1, expected_number, 3, 4};
     auto expected_size = 3;
     
     auto array = Array(init_list);
@@ -203,13 +203,13 @@ TEST(pop, test)
     auto result = array.pop(1);
 
     ASSERT_EQ(array.size, expected_size);
-    ASSERT_EQ(expected_number, result);
+    ASSERT_EQ(expected_number, *result);
     ASSERT_THROW(array.pop(3), IndexOutOfRangeException);
 }
 
 TEST(print, test)
 {
-    auto init_list = {std::make_shared<int>(1), std::make_shared<int>(2), std::make_shared<int>(3), std::make_shared<int>(4)};
+    auto init_list = {1, 2, 3, 4};
     auto result = "[1, 2, 3, 4]";
     auto array = Array(init_list);
 

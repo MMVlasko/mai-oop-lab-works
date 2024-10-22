@@ -4,11 +4,11 @@
 #include "point.h"
 
 template <Scalar T>
-Array<Point<T>> *sort_points(Array<Point<T>> &points) {
+std::shared_ptr<Array<Point<T>>> sort_points(Array<Point<T>> &points) {
     auto crds = Array(points);
-    auto *res = new Array<Point<T>>();
+    auto res = std::make_shared<Array<Point<T>>>(Array<Point<T>>());
 
-    const Point<T> *_min = crds[0];
+    auto _min = crds[0];
     int min_i = 0;
 
     for (int i = 0; i < crds.size; ++i)
@@ -17,10 +17,10 @@ Array<Point<T>> *sort_points(Array<Point<T>> &points) {
             min_i = i;
         }
 
-    res->add(crds.pop(min_i));
+    res->add(*crds.pop(min_i));
 
     while (crds.size) {
-        const Point<T> *min_point = crds[0];
+        auto min_point = crds[0];
         double min = 10.;
         min_i = 0;
 
@@ -32,13 +32,13 @@ Array<Point<T>> *sort_points(Array<Point<T>> &points) {
                 min_i = i;
             }
         }
-        res->add(crds.pop(min_i));
+        res->add(*crds.pop(min_i));
     }
     return res;
 }
 
 template <Scalar T>
-double get_square(Array<Point<T>> &points) {
+T get_square(Array<Point<T>> &points) {
     T square = static_cast<T>(0);
 
     for (int i = 0; i < points.size - 1; ++i)
