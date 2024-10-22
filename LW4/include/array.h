@@ -4,12 +4,13 @@
 #include <initializer_list>
 #include <iostream>
 #include <cstring>
+#include <memory>
 
 #include "exceptions.h"
 
 template <class T> class Array final {
     private:
-        T* *_elements;
+        std::shared_ptr<std::shared_ptr<T>[]> _elements;
         size_t _capacity;
     
     private:
@@ -21,7 +22,7 @@ template <class T> class Array final {
     public:
         Array();
 
-        Array(std::initializer_list<T*> t);
+        Array(std::initializer_list<std::shared_ptr<T>> t);
 
         Array(const Array &other);
 
@@ -31,23 +32,19 @@ template <class T> class Array final {
 
         Array &operator=(Array &&other) noexcept;
 
-        T* operator[](int index);
+        std::shared_ptr<T> operator[](int index);
 
-        ~Array() noexcept;
+        std::shared_ptr<T> remove();
 
-        void free_elements();
-
-        T* remove();
-
-        void add(T* element);
+        void add(std::shared_ptr<T> element);
 
         bool operator==(Array &other);
 
         bool operator!=(Array &other);
 
-        void insert(T* element, size_t index);
+        void insert(std::shared_ptr<T> element, size_t index);
 
-        T* pop(size_t index);
+        std::shared_ptr<T> pop(size_t index);
 
         template <class U>
         friend std::ostream& operator<<(std::ostream &os, Array<U> &number);
@@ -58,12 +55,12 @@ template <class T>
 Array<T>::Array() : _elements{nullptr}, _capacity{0}, size{0} {} 
 
 template <class T>
-Array<T>::Array(std::initializer_list<T*> t) {
+Array<T>::Array(std::initializer_list<std::shared_ptr<T>> t) {
     _capacity = size = t.size();
-    _elements = new T*[_capacity];
+    _elements = std::shared_ptr<std::shared_ptr<T>[]>(new std::shared_ptr<T>[_capacity], std::default_delete<std::shared_ptr<T>[]>());
 
     int i = 0;
-    for (T* elem : t) {
+    for (auto elem : t) {
         _elements[i] = elem;
         ++i;
     }
@@ -73,9 +70,9 @@ template <class T>
 Array<T>::Array(const Array &other) {
     _capacity = other._capacity; 
     size = other.size;
-    _elements = new T*[_capacity]; 
+    _elements = std::shared_ptr<std::shared_ptr<T>[]>(new std::shared_ptr<T>[_capacity], std::default_delete<std::shared_ptr<T>[]>());
     for (int i = 0; i < size; ++i)
-        _elements[i] = new T(*other._elements[i]);
+        _elements[i] = std::make_shared<T>(T(*other._elements[i]));
 } 
  
 template <class T>
@@ -89,22 +86,19 @@ Array<T>::Array(Array &&other) noexcept : _elements{nullptr}, _capacity{0} {
 
 template <class T>
 Array<T>& Array<T>::operator=(const Array &other) {
-    if (this != &other) { 
-        delete[] _elements;
-
+    if (this != &other) {
         _capacity = other._capacity; 
         size = other.size;
-        _elements = new T*[_capacity]; 
+        _elements = std::shared_ptr<std::shared_ptr<T>[]>(new std::shared_ptr<T>[_capacity], std::default_delete<std::shared_ptr<T>[]>());
         for (int i = 0; i < size; ++i)
-            _elements[i] = other._elements[i];
+            _elements[i] = std::make_shared<T>(T(*other._elements[i]));
     } 
     return *this; 
 } 
 
 template <class T>
 Array<T>& Array<T>::operator=(Array &&other) noexcept {
-    if (this != &other) { 
-        delete[] _elements;
+    if (this != &other) {
         _elements = other._elements; 
         _capacity = other._capacity; 
         size = other.size;
@@ -116,7 +110,7 @@ Array<T>& Array<T>::operator=(Array &&other) noexcept {
 } 
 
 template <class T>
-T* Array<T>::operator[] (int index) {
+std::shared_ptr<T> Array<T>::operator[] (int index) {
     if (index < -static_cast<int>(size) || index >= static_cast<int>(size))
         throw IndexOutOfRangeException("Index out of range");
 
@@ -126,18 +120,7 @@ T* Array<T>::operator[] (int index) {
 }
 
 template <class T>
-Array<T>::~Array() noexcept {
-    delete[] _elements;
-}
-
-template <class T>
-void Array<T>::free_elements() {
-    for (int i = 0; i < size; ++i)
-        delete _elements[i];
-}
-
-template <class T>
-T* Array<T>::remove() {
+std::shared_ptr<T> Array<T>::remove() {
     if (size == 0)
         throw ArrayIsEmptyException("Array is now empty");
         
@@ -148,16 +131,16 @@ T* Array<T>::remove() {
 template <class T>
 void Array<T>::_expand(const size_t capacity) {
     _capacity = capacity;
-    T* *temp = new T*[_capacity];
+    auto temp = std::shared_ptr<std::shared_ptr<T>[]>(new std::shared_ptr<T>[_capacity], std::default_delete<std::shared_ptr<T>[]>());
 
     for (int i = 0; i < size; ++i)
-        temp[i] = _elements[i];
+        temp.get()[i] = _elements.get()[i];
 
     _elements = temp;
 }
 
 template <class T>
-void Array<T>::add(T* element) {
+void Array<T>::add(std::shared_ptr<T> element) {
     if(_capacity == size)
         _expand(_capacity * 2 + 1);
 
@@ -169,8 +152,8 @@ template <class T>
 bool Array<T>::operator==(Array &other) {
     if (other.size == size) {
         for (int i = 0; i < size; ++i) {
-            T *first = _elements[i];
-            T *second = other[i];
+            std::shared_ptr<T> first = _elements[i];
+            std::shared_ptr<T> second = other[i];
             if (*first != *second)
                 return false;
         }
@@ -183,8 +166,8 @@ template <class T>
 bool Array<T>::operator!=(Array &other) {
     if (other.size == size) {
         for (int i = 0; i < size; ++i) {
-            T *first = _elements[i];
-            T *second = other[i];
+            std::shared_ptr<T> first = _elements[i];
+            std::shared_ptr<T> second = other[i];
             if (*first != *second)
                 return true;
         }
@@ -194,7 +177,7 @@ bool Array<T>::operator!=(Array &other) {
 }
 
 template <class T>
-void Array<T>::insert(T* element, size_t index) {
+void Array<T>::insert(std::shared_ptr<T> element, size_t index) {
     if (index > size)
         throw IndexOutOfRangeException("Index out of range");
     
@@ -211,11 +194,11 @@ void Array<T>::insert(T* element, size_t index) {
 }
 
 template <class T>
-T* Array<T>::pop(size_t index) {
+std::shared_ptr<T> Array<T>::pop(size_t index) {
     if (index >= size)
         throw IndexOutOfRangeException("Index out of range");
 
-    T *temp = _elements[index];
+    std::shared_ptr<T> temp = _elements[index];
 
     for (size_t i = index + 1; i < size; ++i)
         _elements[i - 1] = _elements[i];
