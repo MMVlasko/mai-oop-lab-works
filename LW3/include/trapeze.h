@@ -2,9 +2,9 @@
 
 #include "figure.h"
 
-class Trapeze final : public Figure {
+class Trapeze : public Figure {
     public:
-        Trapeze() = default;
+        using Figure::Figure;
         Trapeze(std::initializer_list<Point*> t);
 
         friend std::istream& operator>>(std::istream& in, Trapeze &trapeze);

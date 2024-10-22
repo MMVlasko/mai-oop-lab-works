@@ -6,7 +6,7 @@
 
 #include "exceptions.h"
 
-template <class T> class Array final {
+template <class T> class Array {
     private:
         T* *_elements;
         size_t _capacity;
@@ -32,7 +32,7 @@ template <class T> class Array final {
 
         T* operator[](int index);
 
-        ~Array() noexcept;
+        virtual ~Array() noexcept;
 
         void free_elements();
 
@@ -95,7 +95,7 @@ Array<T>& Array<T>::operator=(const Array &other) {
         size = other.size;
         _elements = new T*[_capacity]; 
         for (int i = 0; i < size; ++i)
-            _elements[i] = other._elements[i];
+            _elements[i] = new T(*other._elements[i]);
     } 
     return *this; 
 } 

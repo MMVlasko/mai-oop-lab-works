@@ -22,9 +22,9 @@ Rectangle::Rectangle(const std::initializer_list<Point*> t) {
     
     if (!is_rectangle) {
         _crds->free_elements();
-            delete _crds;
-            _crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+        delete _crds;
+        _crds = nullptr;
+        throw BadInputDataException("Figure is not rectangle");
     }
 
     _name = "Rectangle";
@@ -60,9 +60,9 @@ std::istream& operator>>(std::istream& in, Rectangle& rectangle) {
     
     if (!is_rectangle) {
         rectangle._crds->free_elements();
-            delete rectangle._crds;
-            rectangle._crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+        delete rectangle._crds;
+        rectangle._crds = nullptr;
+        throw BadInputDataException("Figure is not rectangle");
     }
 
     rectangle._name = "Rectangle";

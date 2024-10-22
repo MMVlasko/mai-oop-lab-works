@@ -3,7 +3,7 @@
 #include <trapeze.h>
 #include <tools.h>
 
-Trapeze::Trapeze(std::initializer_list<Point*> t) {
+Trapeze::Trapeze(const std::initializer_list<Point*> t) {
     if (t.size() != 4)
         throw BadInputDataException("Expected four points");
 
@@ -36,9 +36,9 @@ Trapeze::Trapeze(std::initializer_list<Point*> t) {
 
     if (!is_trapeze) {
         _crds->free_elements();
-            delete _crds;
-            _crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+        delete _crds;
+        _crds = nullptr;
+        throw BadInputDataException("Figure is not trapeze");
     }
 
     _name = "Trapeze";
@@ -87,9 +87,9 @@ std::istream& operator>>(std::istream& in, Trapeze& trapeze) {
     
     if (!is_trapeze) {
         trapeze._crds->free_elements();
-            delete trapeze._crds;
-            trapeze._crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+        delete trapeze._crds;
+        trapeze._crds = nullptr;
+        throw BadInputDataException("Figure is not trapeze");
     }
 
     trapeze._name = "Trapeze";

@@ -9,23 +9,11 @@ Point::Point(const double x, const double y) : x(x), y(y) {}
 
 Point::Point(const Point &other) = default;
 
-Point::Point(Point &&other) noexcept : x(other.x), y(other.y) {}
+Point::Point(Point &&other) noexcept = default;
 
-Point& Point::operator=(const Point &other) {
-    if (this != &other) {
-        x = other.x;
-        y = other.y;
-    }
-    return *this;
-}
+Point& Point::operator=(const Point &other) = default;
 
-Point& Point::operator=(Point &&other) noexcept {
-    if (this != &other) {
-        x = other.x;
-        y = other.y;
-    }
-    return *this;
-}
+Point& Point::operator=(Point &&other) noexcept = default;
 
 bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;

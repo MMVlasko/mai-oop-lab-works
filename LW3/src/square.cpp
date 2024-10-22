@@ -24,7 +24,7 @@ Square::Square(const std::initializer_list<Point*> t) {
             _crds->free_elements();
             delete _crds;
             _crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+            throw BadInputDataException("Figure is not square");
         }
 
     _name = "Square";
@@ -61,7 +61,7 @@ std::istream& operator>>(std::istream& in, Square& square) {
             square._crds->free_elements();
             delete square._crds;
             square._crds = nullptr;
-            throw BadInputDataException("Lengths of sides not equal");
+            throw BadInputDataException("Figure is not square");
         }
 
     square._name = "Square";
