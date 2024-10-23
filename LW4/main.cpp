@@ -7,7 +7,7 @@
 #include <trapeze.h>
 
 int main() {
-    using type = double;
+    using type = int;
     auto figures = std::make_shared<Array<Figure<type>>>(Array<Figure<type>>());
     std::cout << "Type 'help' to get info" << std::endl;
 
@@ -31,7 +31,7 @@ int main() {
             }
             
             else if (param == 1) {
-                auto rectangle = Rectangle<double>();
+                auto rectangle = Rectangle<type>();
                 try {
                     std::cin >> rectangle;
                     figures->add(rectangle);
@@ -41,7 +41,7 @@ int main() {
             }
 
             else if (param == 2) {
-                auto square = Square<double>();
+                auto square = Square<type>();
                 try {
                     std::cin >> square;
                     figures->add(square);
@@ -51,7 +51,7 @@ int main() {
             }
 
             else if (param == 3) {
-                auto trapeze = Trapeze<double>();
+                auto trapeze = Trapeze<type>();
                 try {
                     std::cin >> trapeze;
                     figures->add(trapeze);
@@ -94,7 +94,7 @@ int main() {
                 std::cout << "Некорректный ввод!" << std::endl;
             } else {
                 try {
-                    auto poped = figures->pop(index);
+                    std::shared_ptr<Figure<type>> poped = figures->pop(index);
                     std::cout << *poped << " удалена" << std::endl;
                 } catch (IndexOutOfRangeException&) {
                     std::cout << "Элемент с указанным индексом не существвует!" << std::endl;

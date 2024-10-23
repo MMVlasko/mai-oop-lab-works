@@ -43,7 +43,7 @@ Trapeze<T>::Trapeze(std::initializer_list<Point<T>> t) {
             (first_dif_y == 0. && sec_dif_y == 0.) || (third_dif_x == 0. && fourth_dif_x == 0.) ||
             (third_dif_y == 0. && fourth_dif_y == 0.);
 
-    if (!is_trapeze)
+    if (!is_trapeze || !get_square(*this->_crds))
         throw BadInputDataException("Non-parallel sides!");
 
     this->_name = "Trapeze";
@@ -90,7 +90,7 @@ std::istream& operator>>(std::istream& in, Trapeze<T>& trapeze) {
             (first_dif_y == 0. && sec_dif_y == 0.) || (third_dif_x == 0. && fourth_dif_x == 0.) ||
             (third_dif_y == 0. && fourth_dif_y == 0.);
 
-    if (!is_trapeze)
+    if (!is_trapeze || !get_square(*trapeze._crds))
         throw BadInputDataException("Lengths of sides not equal");
 
     trapeze._name = "Trapeze";
