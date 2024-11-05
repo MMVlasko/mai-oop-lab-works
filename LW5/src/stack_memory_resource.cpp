@@ -30,15 +30,14 @@ void *StackMemoryResource::do_allocate(const size_t bytes, size_t alignment) {
 
 void StackMemoryResource::do_deallocate(void *ptr, size_t bytes, size_t alignment) {
     auto offset = static_cast<char*>(ptr) - buffer;
-    auto block = std::ranges::find_if(blocks, [=](const Block& b) {
-        return b.offset == offset && b.size == bytes && !b.free;
-    });
 
-    if (block == blocks.end()) {
-        throw std::logic_error("This pointer wasn't allocated.");
-    }
+    for (Block &b: blocks)
+        if (b.offset == offset && b.size == bytes && !b.free) {
+            b.free = true;
+            return;
+        }
 
-    block->free = true;
+    throw std::logic_error("This pointer wasn't allocated.");
 }
 
 bool StackMemoryResource::do_is_equal(const memory_resource &other) const noexcept {
