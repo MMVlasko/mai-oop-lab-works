@@ -5,7 +5,7 @@
 
 StackMemoryResource::~StackMemoryResource() {
     for (auto& block : blocks)
-        block.free = false;
+        block.free = true;
 }
 
 void *StackMemoryResource::do_allocate(const size_t bytes, size_t alignment) {

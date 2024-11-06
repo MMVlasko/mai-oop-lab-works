@@ -4,8 +4,8 @@
 
 TEST(destructor, test)
 {
-    StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
+    auto *mr = new StackMemoryResource();
+    delete mr;
 }
 
 TEST(allocate_and_deallocate, test)

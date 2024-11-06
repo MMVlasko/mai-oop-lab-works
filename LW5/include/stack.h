@@ -5,50 +5,47 @@
 
 #include <exceptions.h>
 
-template <class T>
-class Stack {
-    private:
-        struct Node {
-            T value;
-            Node* next;
-        };
+template <class T> class Stack {
+    struct _node {
+        T value;
+        _node* next;
+    };
 
-        class const_iterator {
+    using AT = std::pmr::polymorphic_allocator<_node>;
+
+    _node* _head = nullptr;
+    AT _alloc;
+    size_t _size;
+
+    void _clear();
+
+    public:
+        class ConstIterator {
             public:
                 using iterator_category = std::forward_iterator_tag;
+                using pointer_type = const T*;
+                using reference_type = const T&;
 
             private:
-                const Node* _current;
+                const _node* _current;
 
             public:
-                explicit const_iterator(const Node *node);
+                explicit ConstIterator(const _node *node);
 
-                const T& operator*() const;
+                reference_type operator*() const;
 
-                const T *operator->() const;
+                pointer_type operator->() const;
 
-                const_iterator &operator++();
+                ConstIterator &operator++();
 
-                const_iterator operator++(int);
+                ConstIterator operator++(int);
 
-                bool operator==(const const_iterator &other) const;
+                bool operator==(const ConstIterator &other) const;
 
-                bool operator!=(const const_iterator &other) const;
+                bool operator!=(const ConstIterator &other) const;
         };
 
-    public:
-        using AT = std::pmr::polymorphic_allocator<Node>;
-
-    private:
-        Node* _head = nullptr;
-        AT _alloc;
-        size_t _size;
-
-    private:
-        void _clear();
-
-    public:
-        explicit Stack(const AT& alloc = {});
+        explicit Stack(std::pmr::memory_resource* resource);
 
         Stack(const Stack &other, std::pmr::memory_resource* resource = nullptr);
 
@@ -79,14 +76,14 @@ class Stack {
         template <class U>
         friend std::ostream& operator<<(std::ostream &os, const Stack<U> &stack);
 
-        const_iterator begin() const;
+        ConstIterator begin() const;
 
-        const_iterator end() const;
+        ConstIterator end() const;
 };
 
 
 template <class T>
-Stack<T>::Stack(const AT& alloc) : _alloc(alloc), _size(0) {}
+Stack<T>::Stack(std::pmr::memory_resource* resource) : _alloc(resource), _size(0) {}
 
 template <class T>
 Stack<T>::Stack(const Stack &other, std::pmr::memory_resource* resource)
@@ -100,15 +97,15 @@ Stack<T>::Stack(const Stack &other, std::pmr::memory_resource* resource)
         } catch (std::bad_alloc&) {
             throw OutOfMemoryException("Buffer was overflowed");
         }
-        std::allocator_traits<AT>::construct(_alloc, _head, Node{other._head->value, nullptr});
+        std::allocator_traits<AT>::construct(_alloc, _head, _node{other._head->value, nullptr});
 
-        Node* current = _head;
-        Node* other_current = other._head->next;
+        _node* current = _head;
+        _node* other_current = other._head->next;
 
         while (other_current != nullptr) {
             try {
-                Node *new_node = _alloc.allocate(1);
-                std::allocator_traits<AT>::construct(_alloc, new_node, Node{other_current->value,
+                _node *new_node = _alloc.allocate(1);
+                std::allocator_traits<AT>::construct(_alloc, new_node, _node{other_current->value,
                 nullptr});
 
                 current->next = new_node;
@@ -135,7 +132,7 @@ Stack<T>::Stack(Stack &&other) noexcept : _alloc(other._alloc) {
     _size = other._size;
 }
 
-template<class T>
+template <class T>
 Stack<T>::~Stack() noexcept {
     _clear();
 }
@@ -153,16 +150,16 @@ Stack<T>& Stack<T>::operator=(const Stack &other) {
             } catch (std::bad_alloc&) {
                 throw OutOfMemoryException("Buffer was overflowed");
             }
-            std::allocator_traits<AT>::construct(_alloc, _head, Node{other._head->value,
+            std::allocator_traits<AT>::construct(_alloc, _head, _node{other._head->value,
                 nullptr});
 
-            Node* current = _head;
-            Node* other_current = other._head->next;
+            _node* current = _head;
+            _node* other_current = other._head->next;
 
             while (other_current != nullptr) {
                 try {
-                    Node *new_node = _alloc.allocate(1);
-                    std::allocator_traits<AT>::construct(_alloc, new_node, Node{other_current->value,
+                    _node *new_node = _alloc.allocate(1);
+                    std::allocator_traits<AT>::construct(_alloc, new_node, _node{other_current->value,
                     nullptr});
                     current->next = new_node;
                     current = new_node;
@@ -233,8 +230,8 @@ bool Stack<T>::operator!=(const Stack &other) const {
 template <class T>
 void Stack<T>::push(T element) {
     try {
-        Node *node = _alloc.allocate(1);
-        std::allocator_traits<AT>::construct(_alloc, node, Node{element, _head});
+        _node *node = _alloc.allocate(1);
+        std::allocator_traits<AT>::construct(_alloc, node, _node{element, _head});
         _head = node;
         ++_size;
     } catch (std::bad_alloc&) {
@@ -247,7 +244,7 @@ std::shared_ptr<T> Stack<T>::pop() {
     if (_head == nullptr)
         throw EmptyStackException("Stack is empty");
 
-    Node* temp = _head;
+    _node* temp = _head;
     std::shared_ptr<T> result = std::make_shared<T>(_head->value);
     _head = _head->next;
 
@@ -284,7 +281,7 @@ void Stack<T>::clear() {
 template <class T>
 void Stack<T>::_clear() {
     while (_head) {
-        Node* temp = _head;
+        _node* temp = _head;
         _head = _head->next;
         std::allocator_traits<AT>::destroy(_alloc, temp);
         _alloc.deallocate(temp, 1);
@@ -308,47 +305,47 @@ std::ostream& operator<<(std::ostream &os, const Stack<T> &stack) {
 }
 
 template <class T>
-Stack<T>::const_iterator::const_iterator(const Node* node) : _current(node) {}
+Stack<T>::ConstIterator::ConstIterator(const _node* node) : _current(node) {}
 
 template <class T>
-const T& Stack<T>::const_iterator::operator*() const {
+const T& Stack<T>::ConstIterator::operator*() const {
     return _current->value;
 }
 
 template <class T>
-const T* Stack<T>::const_iterator::operator->() const {
+const T* Stack<T>::ConstIterator::operator->() const {
     return &(_current->value);
 }
 
 template <class T>
-typename Stack<T>::const_iterator& Stack<T>::const_iterator::operator++() {
+typename Stack<T>::ConstIterator& Stack<T>::ConstIterator::operator++() {
     _current = _current->next;
     return *this;
 }
 
 template <class T>
-typename Stack<T>::const_iterator Stack<T>::const_iterator::operator++(int) {
-    const_iterator temp = *this;
+typename Stack<T>::ConstIterator Stack<T>::ConstIterator::operator++(int) {
+    ConstIterator temp = *this;
     ++(*this);
     return temp;
 }
 
 template <class T>
-bool Stack<T>::const_iterator::operator==(const const_iterator& other) const {
+bool Stack<T>::ConstIterator::operator==(const ConstIterator& other) const {
     return _current == other._current;
 }
 
 template <class T>
-bool Stack<T>::const_iterator::operator!=(const const_iterator& other) const {
+bool Stack<T>::ConstIterator::operator!=(const ConstIterator& other) const {
     return _current != other._current;
 }
 
 template <class T>
-typename Stack<T>::const_iterator Stack<T>::begin() const {
-    return const_iterator(_head);
+typename Stack<T>::ConstIterator Stack<T>::begin() const {
+    return ConstIterator(_head);
 }
 
 template <class T>
-typename Stack<T>::const_iterator Stack<T>::end() const {
-    return const_iterator(nullptr);
+typename Stack<T>::ConstIterator Stack<T>::end() const {
+    return ConstIterator(nullptr);
 }

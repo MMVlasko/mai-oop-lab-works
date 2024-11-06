@@ -11,12 +11,10 @@ struct Pair {
 
 int main() {
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc1(&mr1);
-    auto int_stack = Stack<int>(alloc1);
+    auto int_stack = Stack<int>(&mr1);
 
     StackMemoryResource mr2;
-    std::pmr::polymorphic_allocator<Pair> alloc2(&mr2);
-    auto pair_stack = Stack<Pair>(alloc2);
+    auto pair_stack = Stack<Pair>(&mr2);
 
     std::cout << "Type 'help' to get info" << std::endl;
 
@@ -32,12 +30,6 @@ int main() {
             std::string type;
             std::cin >> type;
 
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Некорректный ввод!" << std::endl;
-            }
-
             if (type == "int") {
                 int elem;
                 std::cin >> elem;
@@ -46,6 +38,7 @@ int main() {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     std::cout << "Некорректный ввод!" << std::endl;
+                    continue;
                 }
 
                 try {
@@ -63,6 +56,7 @@ int main() {
                     std::cin.clear();
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     std::cout << "Некорректный ввод!" << std::endl;
+                    continue;
                 }
                 try {
                     pair_stack.push(pair);
@@ -79,19 +73,13 @@ int main() {
             std::string type;
             std::cin >> type;
 
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Некорректный ввод!" << std::endl;
-            }
-
             if (type == "int")
                 std::cout << int_stack << std::endl;
 
             else if (type == "pair") {
                 std::cout << ']';
-                for (auto pair: pair_stack)
-                    std::cout << " (" << pair.x << ", " << pair.y << ')';
+                for (auto [x, y]: pair_stack)
+                    std::cout << " (" << x << ", " << y << ')';
                 std::cout << ']' << std::endl;
             }
 
@@ -102,12 +90,6 @@ int main() {
         else if (input == "pop") {
             std::string type;
             std::cin >> type;
-
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Некорректный ввод!" << std::endl;
-            }
 
             if (type == "int")
                 try {
@@ -132,12 +114,6 @@ int main() {
             std::string type;
             std::cin >> type;
 
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Некорректный ввод!" << std::endl;
-            }
-
             if (type == "int")
                 int_stack.clear();
 
@@ -151,12 +127,6 @@ int main() {
         else if (input == "size") {
             std::string type;
             std::cin >> type;
-
-            if (std::cin.fail()) {
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Некорректный ввод!" << std::endl;
-            }
 
             if (type == "int")
                 std::cout << int_stack.size() << std::endl;

@@ -7,9 +7,8 @@
 TEST(default_constructor, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
 
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     auto expected_size = 0;
     auto size = stack.size();
@@ -19,8 +18,7 @@ TEST(default_constructor, test)
 TEST(push_and_pop, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     ASSERT_THROW(stack.pop(), EmptyStackException);
 
@@ -45,8 +43,7 @@ TEST(push_and_pop, test_complex)
     };
 
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<Complex> alloc(&mr);
-    auto stack = Stack<Complex>(alloc);
+    auto stack = Stack<Complex>(&mr);
 
     auto element = Complex{12, 13};
     auto expected_size = 1;
@@ -65,8 +62,7 @@ TEST(push_and_pop, test_complex)
 TEST(top, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     ASSERT_THROW(stack.top(), EmptyStackException);
 
@@ -82,8 +78,7 @@ TEST(top, test)
 TEST(size, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     auto first_expected_size = 0;
     auto sec_expected_size = 6;
@@ -99,8 +94,7 @@ TEST(size, test)
 TEST(empty, stack)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
     auto element = 1;
 
     ASSERT_TRUE(stack.empty());
@@ -113,8 +107,7 @@ TEST(empty, stack)
 TEST(clear_and_destructor, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     auto sec_expected_size = 0;
     auto first_expected_size = 6;
@@ -133,8 +126,7 @@ TEST(copy_constructor, test)
 {
     StackMemoryResource mr;
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
@@ -149,8 +141,7 @@ TEST(copy_constructor, test)
 TEST(move_constructor, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack(Stack<int>(alloc));
+    auto stack = Stack(Stack<int>(&mr));
     auto element = 333;
     auto expected_size = 1;
 
@@ -164,15 +155,13 @@ TEST(move_constructor, test)
 TEST(assignment_operator, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
 
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc1(&mr1);
-    auto new_stack = Stack<int>(alloc1);
+    auto new_stack = Stack<int>(&mr1);
 
     new_stack.push(333);
 
@@ -186,16 +175,14 @@ TEST(assignment_operator, test)
 TEST(move_assignment_operator, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
     auto expected_size = 0;
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
 
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc1(&mr1);
-    stack = Stack<int>(alloc1);
+    stack = Stack<int>(&mr1);
 
     ASSERT_EQ(stack.size(), expected_size);
 }
@@ -203,15 +190,13 @@ TEST(move_assignment_operator, test)
 TEST(equal_operator, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
 
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc1(&mr1);
-    auto new_stack = Stack<int>(alloc1);
+    auto new_stack = Stack<int>(&mr1);
 
     for (int i = 0; i < 6; ++i)
         new_stack.push(i);
@@ -226,15 +211,13 @@ TEST(equal_operator, test)
 TEST(not_equal_operator, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
 
     StackMemoryResource mr1;
-    std::pmr::polymorphic_allocator<int> alloc1(&mr1);
-    auto new_stack = Stack<int>(alloc1);
+    auto new_stack = Stack<int>(&mr1);
 
     for (int i = 0; i < 6; ++i)
         new_stack.push(i);
@@ -250,8 +233,7 @@ TEST(print, test)
 {
     StackMemoryResource mr;
     auto result = "]5, 4, 3, 2, 1, 0]";
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     for (int i = 0; i < 6; ++i)
         stack.push(i);
@@ -267,8 +249,7 @@ TEST(print, test_empty)
 {
     StackMemoryResource mr;
     auto result = "]]";
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     testing::internal::CaptureStdout();
     std::cout << stack;
@@ -277,15 +258,32 @@ TEST(print, test_empty)
     ASSERT_EQ(output, result);
 }
 
-TEST(iterator, test)
+TEST(iteration, tests)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
     auto count = 15;
+    auto expected = count;
 
     for (int i = 0; i < count + 1; ++i)
         stack.push(i);
+
+    auto iter = stack.begin();
+    auto end = stack.end();
+    auto  begin = stack.begin();
+
+    ASSERT_TRUE(iter == begin);
+    ASSERT_TRUE(iter != end);
+
+    ASSERT_EQ(*iter, expected);
+
+    iter++;
+    --expected;
+    ASSERT_EQ(*(iter.operator->()), expected);
+
+    ++iter;
+    --expected;
+    ASSERT_EQ(*iter, expected);
 
     for (int elem : stack) {
         ASSERT_EQ(elem, count);
@@ -296,8 +294,7 @@ TEST(iterator, test)
 TEST(owerflow_error, test)
 {
     StackMemoryResource mr;
-    std::pmr::polymorphic_allocator<int> alloc(&mr);
-    auto stack = Stack<int>(alloc);
+    auto stack = Stack<int>(&mr);
 
     ASSERT_THROW(for (int i = 0; i < 5000; ++i) stack.push(i), OutOfMemoryException);
 }
