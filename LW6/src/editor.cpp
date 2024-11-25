@@ -43,7 +43,7 @@ void Editor::add_npc(const std::string& type, const std::string& name, double x,
 void Editor::save(const std::string &filename) {
     std::ofstream input(filename);
     if (!input)
-        throw FileNotExistsException("Input file is not exist");
+        throw FileNotExistsException("Error with open output file");
 
     for (int i = 0; i < _npcs->size - 1; ++i)
         (*_npcs)[i]->save(input);
@@ -64,7 +64,7 @@ void Editor::load(const std::string &filename) {
 }
 
 void Editor::fight(double max_distance) {
-    auto visitor = Visitor(_npcs, max_distance, _observers);
+    auto visitor = FightVisitor(_npcs, max_distance, _observers);
     visitor.fight();
 }
 

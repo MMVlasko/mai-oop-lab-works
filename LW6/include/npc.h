@@ -26,7 +26,7 @@ class NPC {
 
         NPC &operator=(NPC &&other) noexcept;
 
-        void accept(Visitor &visitor) const;
+        void accept(FightVisitor &visitor) const;
 
         void save(std::ofstream &os, bool nl = true) const;
 

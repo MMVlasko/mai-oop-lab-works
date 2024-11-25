@@ -6,6 +6,8 @@
 
 TEST(constructors_and_get_npcs, test)
 {
+    auto expected_size = 0;
+
     auto editor = Editor();
     auto new_editor = Editor(editor);
     auto another_editor = Editor(Editor());
@@ -20,11 +22,11 @@ TEST(constructors_and_get_npcs, test)
     auto copied_editor_npcs = copied_editor.get_npcs();
     auto moved_editor_npcs = moved_editor.get_npcs();
 
-    ASSERT_TRUE(editor_npcs->size == 0);
-    ASSERT_TRUE(new_editor_npcs->size == 0);
-    ASSERT_TRUE(another_editor_npcs->size == 0);
-    ASSERT_TRUE(copied_editor_npcs->size == 0);
-    ASSERT_TRUE(moved_editor_npcs->size == 0);
+    ASSERT_EQ(editor_npcs->size, expected_size);
+    ASSERT_EQ(new_editor_npcs->size, expected_size);
+    ASSERT_EQ(another_editor_npcs->size, expected_size);
+    ASSERT_EQ(copied_editor_npcs->size, expected_size);
+    ASSERT_EQ(moved_editor_npcs->size, expected_size);
 }
 
 TEST(create_and_add_npc, test)
@@ -115,7 +117,7 @@ TEST(save_npc, test)
         std::filesystem::remove(filename);
 }
 
-TEST(visit, test)
+TEST(fight, test)
 {
     auto expected = "NPC Mihail (werewolf) was killed by NPC Alex (bear)\n";
     auto max_distance = 100.;

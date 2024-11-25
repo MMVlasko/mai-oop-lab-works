@@ -1,7 +1,7 @@
 #pragma once
 
 #include "array.h"
-#include "npcs.h"
+#include "npc.h"
 
 class Editor {
     std::shared_ptr<Array<NPC>> _npcs;
@@ -33,7 +33,7 @@ class Editor {
 
         std::shared_ptr<Array<NPC>> get_npcs();
 
-        bool empty() const;
+        [[nodiscard]] bool empty() const;
 };
 
 template <class ObserverT>

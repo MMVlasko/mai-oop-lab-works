@@ -15,7 +15,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_library(LW6_npcs src/npcs.cpp)
+add_library(LW6_npcs src/npc.cpp)
 target_include_directories(LW6_npcs PRIVATE include)
 
 add_library(LW6_array include/array.h)
@@ -48,7 +48,7 @@ target_link_libraries(LW6 PRIVATE LW6_editor LW6_observer LW6_exceptions)
 
 enable_testing()
 
-add_executable(LW6_npcs_tests test/test_npcs.cpp)
+add_executable(LW6_npcs_tests test/test_npc.cpp)
 target_include_directories(LW6_npcs_tests PRIVATE include)
 
 add_executable(LW6_factory_tests test/test_factory.cpp)

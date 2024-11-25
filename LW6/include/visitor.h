@@ -6,6 +6,13 @@
 class NPC;
 
 class Visitor {
+    public:
+        virtual ~Visitor() = default;
+
+        virtual void visit(const NPC& npc) = 0;
+};
+
+class FightVisitor : Visitor {
     std::shared_ptr<Array<NPC>> _npcs;
     std::shared_ptr<Array<std::shared_ptr<Observer>>> _observers;
     double _max_distance;
@@ -14,18 +21,18 @@ class Visitor {
     void _log(const std::string &message) const;
 
     public:
-        Visitor(std::shared_ptr<Array<NPC>>& npcs, double max_distance,
+        FightVisitor(std::shared_ptr<Array<NPC>>& npcs, double max_distance,
             const std::shared_ptr<Array<std::shared_ptr<Observer>>>& observers);
 
-        Visitor(const Visitor &other) = default;
+        FightVisitor(const FightVisitor &other) = default;
 
-        Visitor(Visitor &&other) = default;
+        FightVisitor(FightVisitor &&other) = default;
 
-        Visitor &operator=(const Visitor &other);
+        FightVisitor &operator=(const FightVisitor &other);
 
-        Visitor &operator=(Visitor &&other) noexcept;
+        FightVisitor &operator=(FightVisitor &&other) noexcept;
 
         void fight();
 
-        void visit(const NPC &npc);
+        void visit(const NPC &npc) override;
 };

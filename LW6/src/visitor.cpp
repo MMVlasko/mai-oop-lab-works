@@ -1,13 +1,13 @@
 #include <cmath>
 
-#include <npcs.h>
+#include <npc.h>
 #include <visitor.h>
 
-Visitor::Visitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance,
-    const std::shared_ptr<Array<std::shared_ptr<Observer>>> &observers) : _npcs(npcs), _max_distance(max_distance),
-        _observers(observers) {}
+FightVisitor::FightVisitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance,
+    const std::shared_ptr<Array<std::shared_ptr<Observer>>> &observers) : _npcs(npcs), _observers(observers),
+        _max_distance(max_distance) {}
 
-Visitor &Visitor::operator=(const Visitor &other) {
+FightVisitor &FightVisitor::operator=(const FightVisitor &other) {
     if (this != &other) {
         _npcs = other._npcs;
         _observers = other._observers;
@@ -16,7 +16,7 @@ Visitor &Visitor::operator=(const Visitor &other) {
     return *this;
 }
 
-Visitor &Visitor::operator=(Visitor &&other) noexcept {
+FightVisitor &FightVisitor::operator=(FightVisitor &&other) noexcept {
     if (this != &other) {
         _npcs = other._npcs;
         _observers = other._observers;
@@ -25,8 +25,7 @@ Visitor &Visitor::operator=(Visitor &&other) noexcept {
     return *this;
 }
 
-
-void Visitor::fight() {
+void FightVisitor::fight() {
     for (int i = 0; i < _npcs->size; ++i) {
         for (int j = 0; j < _npcs->size; ++j) {
             if (i != j) {
@@ -49,7 +48,7 @@ void Visitor::fight() {
     }
 }
 
-void Visitor::visit(const NPC &npc) {
+void FightVisitor::visit(const NPC &npc) {
     auto self_type = npc.get_type();
     auto other_type = (*_npcs)[_now]->get_type();
     auto self_crds = npc.get_crds();
@@ -64,7 +63,7 @@ void Visitor::visit(const NPC &npc) {
     }
 }
 
-void Visitor::_log(const std::string &message) const {
+void FightVisitor::_log(const std::string &message) const {
     if (_observers != nullptr)
         for (int i = 0; i < _observers->size; ++i)
             (*(*_observers)[i])->notify(message);

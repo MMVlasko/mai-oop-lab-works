@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "npcs.h"
+#include "npc.h"
 
 class Factory {
     public:

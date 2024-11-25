@@ -32,7 +32,7 @@ class FileObserver : public Observer {
     public:
         using Observer::Observer;
 
-        explicit FileObserver(const std::string &filename);
+        explicit FileObserver(std::string filename);
 
         void notify(const std::string &message) override;
 

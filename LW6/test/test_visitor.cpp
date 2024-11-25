@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include <visitor.h>
-#include <npcs.h>
+#include <npc.h>
 
 TEST(constructors_and_get_npcs, test)
 {
@@ -17,13 +17,13 @@ TEST(constructors_and_get_npcs, test)
     auto npcs = std::make_shared<Array<NPC>>(Array<NPC>());
     npcs->add(npc);
 
-    auto visitor = Visitor(npcs, max_distance, nullptr);
-    auto new_visitor = Visitor(visitor);
-    auto another_visitor = Visitor(Visitor(npcs, max_distance, nullptr));
-    auto copied_visitor = Visitor(npcs, max_distance, nullptr);
+    auto visitor = FightVisitor(npcs, max_distance, nullptr);
+    auto new_visitor = FightVisitor(visitor);
+    auto another_visitor = FightVisitor(FightVisitor(npcs, max_distance, nullptr));
+    auto copied_visitor = FightVisitor(npcs, max_distance, nullptr);
     copied_visitor = visitor;
-    auto moved_visitor = Visitor(npcs, max_distance, nullptr);
-    moved_visitor = Visitor(npcs, max_distance, nullptr);
+    auto moved_visitor = FightVisitor(npcs, max_distance, nullptr);
+    moved_visitor = FightVisitor(npcs, max_distance, nullptr);
 }
 
 TEST(fight, test)
@@ -48,7 +48,7 @@ TEST(fight, test)
     npcs->add(npc_1);
     npcs->add(npc_2);
 
-    auto visitor = Visitor(npcs, max_distance, nullptr);
+    auto visitor = FightVisitor(npcs, max_distance, nullptr);
     visitor.fight();
 
     ASSERT_EQ(npcs->size, expected_size);
@@ -80,7 +80,7 @@ TEST(visit, test)
     auto observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array<std::shared_ptr<Observer>>());
     observers->add(std::make_shared<ConsoleObserver>(observer));
 
-    auto visitor = Visitor(npcs, max_distance, observers);
+    auto visitor = FightVisitor(npcs, max_distance, observers);
 
     testing::internal::CaptureStdout();
     visitor.visit(npc_2);

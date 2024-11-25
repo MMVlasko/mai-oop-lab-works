@@ -1,6 +1,6 @@
 #include <exceptions.h>
 #include <factory.h>
-#include <npcs.h>
+#include <npc.h>
 
 std::shared_ptr<NPC> Factory::create_npc(const std::string &type, const std::string &name, double x, double y) {
     if (type == "bear" || type == "werewolf" || type == "robber") {

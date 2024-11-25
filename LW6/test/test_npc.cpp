@@ -2,10 +2,11 @@
 #include <filesystem>
 #include <gtest/gtest.h>
 
-#include <npcs.h>
+#include <npc.h>
 
 TEST(constructors_and_gettings, test)
 {
+    auto expected_alive = true;
     auto type = "werewolf";
     auto name = "Mihail";
     auto x = 100.;
@@ -43,11 +44,11 @@ TEST(constructors_and_gettings, test)
     ASSERT_EQ(copied_npc.get_crds().y, y);
     ASSERT_EQ(moved_npc.get_crds().y, y);
 
-    ASSERT_EQ(npc.alive, true);
-    ASSERT_EQ(new_npc.alive, true);
-    ASSERT_EQ(another_npc.alive, true);
-    ASSERT_EQ(copied_npc.alive, true);
-    ASSERT_EQ(moved_npc.alive, true);
+    ASSERT_EQ(npc.alive, expected_alive);
+    ASSERT_EQ(new_npc.alive, expected_alive);
+    ASSERT_EQ(another_npc.alive, expected_alive);
+    ASSERT_EQ(copied_npc.alive, expected_alive);
+    ASSERT_EQ(moved_npc.alive, expected_alive);
 }
 
 TEST(save, test)
