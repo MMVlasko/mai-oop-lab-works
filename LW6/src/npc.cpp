@@ -4,7 +4,9 @@
 #include <npc.h>
 
 NPC::NPC(std::string type, std::string name, double x, double y)  : _type(std::move(type)),
-    _name(std::move(name)), _x(x), _y(y), alive(true) {}
+    _name(std::move(name)), _x(x), _y(y), alive(true) {
+    _observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array<std::shared_ptr<Observer>>());
+}
 
 NPC& NPC::operator=(const NPC &other) {
     if (this != &other) {
@@ -26,9 +28,16 @@ NPC& NPC::operator=(NPC &&other) noexcept {
     return *this;
 }
 
-void NPC::accept(FightVisitor &visitor) const {
+void NPC::accept(Visitor &visitor) {
     visitor.visit(*this);
 }
+
+void NPC::notify(BaseNPC &other) {
+    for (int i = 0; i < _observers->size; ++i)
+        (*(*_observers)[i])->handle_event("NPC " + other.get_name() + " (" + other.get_type() +
+            ") was killed by NPC " + _name + " (" + _type + ")");
+}
+
 
 void NPC::save(std::ofstream &os, const bool nl) const {
     if (os.is_open()) {

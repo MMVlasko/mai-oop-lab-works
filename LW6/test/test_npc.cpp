@@ -51,6 +51,32 @@ TEST(constructors_and_gettings, test)
     ASSERT_EQ(moved_npc.alive, expected_alive);
 }
 
+TEST(add_observer_and_notify, test)
+{
+    auto message = "NPC Mihail (werewolf) was killed by NPC Alex (bear)\n";
+    auto type_1 = "werewolf";
+    auto name_1 = "Mihail";
+    auto x_1 = 100.;
+    auto y_1 = 200.1;
+
+    auto type_2 = "bear";
+    auto name_2 = "Alex";
+    auto x_2 = 150.;
+    auto y_2 = 250.1;
+
+    auto npc_1 = NPC(type_1, name_1, x_1, y_1);
+    auto npc_2 = NPC(type_2, name_2, x_2, y_2);
+
+    auto observer = ConsoleObserver();
+    npc_2.add_observer(std::make_shared<ConsoleObserver>(observer));
+
+    testing::internal::CaptureStdout();
+    npc_2.notify(npc_1);
+    auto output = testing::internal::GetCapturedStdout();
+
+    ASSERT_EQ(output, message);
+}
+
 TEST(save, test)
 {
     auto expected = "werewolf Mihail 100.2 200.1";

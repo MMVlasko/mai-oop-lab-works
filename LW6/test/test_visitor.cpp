@@ -17,13 +17,13 @@ TEST(constructors_and_get_npcs, test)
     auto npcs = std::make_shared<Array<NPC>>(Array<NPC>());
     npcs->add(npc);
 
-    auto visitor = FightVisitor(npcs, max_distance, nullptr);
+    auto visitor = FightVisitor(npcs, max_distance);
     auto new_visitor = FightVisitor(visitor);
-    auto another_visitor = FightVisitor(FightVisitor(npcs, max_distance, nullptr));
-    auto copied_visitor = FightVisitor(npcs, max_distance, nullptr);
+    auto another_visitor = FightVisitor(FightVisitor(npcs, max_distance));
+    auto copied_visitor = FightVisitor(npcs, max_distance);
     copied_visitor = visitor;
-    auto moved_visitor = FightVisitor(npcs, max_distance, nullptr);
-    moved_visitor = FightVisitor(npcs, max_distance, nullptr);
+    auto moved_visitor = FightVisitor(npcs, max_distance);
+    moved_visitor = FightVisitor(npcs, max_distance);
 }
 
 TEST(fight, test)
@@ -48,7 +48,7 @@ TEST(fight, test)
     npcs->add(npc_1);
     npcs->add(npc_2);
 
-    auto visitor = FightVisitor(npcs, max_distance, nullptr);
+    auto visitor = FightVisitor(npcs, max_distance);
     visitor.fight();
 
     ASSERT_EQ(npcs->size, expected_size);
@@ -77,10 +77,10 @@ TEST(visit, test)
     npcs->add(npc_1);
 
     auto observer = ConsoleObserver();
-    auto observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array<std::shared_ptr<Observer>>());
-    observers->add(std::make_shared<ConsoleObserver>(observer));
+    npc_1.add_observer(std::make_shared<ConsoleObserver>(observer));
+    npc_2.add_observer(std::make_shared<ConsoleObserver>(observer));
 
-    auto visitor = FightVisitor(npcs, max_distance, observers);
+    auto visitor = FightVisitor(npcs, max_distance);
 
     testing::internal::CaptureStdout();
     visitor.visit(npc_2);

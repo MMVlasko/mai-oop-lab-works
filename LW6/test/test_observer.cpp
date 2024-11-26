@@ -4,26 +4,26 @@
 
 #include <observer.h>
 
-TEST(console_notify, test)
+TEST(console_handle_event, test)
 {
     auto observer = ConsoleObserver();
     auto message = "hello";
     auto expected = "hello\n";
 
     testing::internal::CaptureStdout();
-    observer.notify(message);
+    observer.handle_event(message);
     auto output = testing::internal::GetCapturedStdout();
 
     ASSERT_EQ(output, expected);
 }
 
-TEST(file_notify, test)
+TEST(file_handle_event, test)
 {
     auto filename = "log.txt";
     auto observer = FileObserver(filename);
     auto message = "hello";
 
-    observer.notify(message);
+    observer.handle_event(message);
 
     std::ifstream input(filename);
     ASSERT_TRUE(input.good());

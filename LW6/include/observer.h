@@ -16,14 +16,14 @@ class Observer {
 
         virtual ~Observer() = default;
 
-        virtual void notify(const std::string &message) {};
+        virtual void handle_event(const std::string &message) {};
 };
 
 class ConsoleObserver : public Observer {
     public:
         using Observer::Observer;
 
-        void notify(const std::string &message) override;
+        void handle_event(const std::string &message) override;
 };
 
 class FileObserver : public Observer {
@@ -34,6 +34,5 @@ class FileObserver : public Observer {
 
         explicit FileObserver(std::string filename);
 
-        void notify(const std::string &message) override;
-
+        void handle_event(const std::string &message) override;
 };

@@ -3,14 +3,12 @@
 #include <npc.h>
 #include <visitor.h>
 
-FightVisitor::FightVisitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance,
-    const std::shared_ptr<Array<std::shared_ptr<Observer>>> &observers) : _npcs(npcs), _observers(observers),
-        _max_distance(max_distance) {}
+FightVisitor::FightVisitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance) : _npcs(npcs),
+    _max_distance(max_distance) {}
 
 FightVisitor &FightVisitor::operator=(const FightVisitor &other) {
     if (this != &other) {
         _npcs = other._npcs;
-        _observers = other._observers;
         _max_distance = other._max_distance;
     }
     return *this;
@@ -19,7 +17,6 @@ FightVisitor &FightVisitor::operator=(const FightVisitor &other) {
 FightVisitor &FightVisitor::operator=(FightVisitor &&other) noexcept {
     if (this != &other) {
         _npcs = other._npcs;
-        _observers = other._observers;
         _max_distance = other._max_distance;
     }
     return *this;
@@ -48,7 +45,7 @@ void FightVisitor::fight() {
     }
 }
 
-void FightVisitor::visit(const NPC &npc) {
+void FightVisitor::visit(NPC &npc) {
     auto self_type = npc.get_type();
     auto other_type = (*_npcs)[_now]->get_type();
     auto self_crds = npc.get_crds();
@@ -58,13 +55,6 @@ void FightVisitor::visit(const NPC &npc) {
         self_type == "bear" && other_type == "werewolf") && std::pow((self_crds.x - other_crds.x), 2) +
         std::pow((self_crds.y - other_crds.y), 2) <= std::pow(_max_distance, 2)) {
         (*_npcs)[_now]->alive = false;
-        _log("NPC " + (*_npcs)[_now]->get_name() + " (" + other_type +
-            ") was killed by NPC " + npc.get_name() + " (" + self_type + ")");
+        npc.notify(*(*_npcs)[_now]);
     }
-}
-
-void FightVisitor::_log(const std::string &message) const {
-    if (_observers != nullptr)
-        for (int i = 0; i < _observers->size; ++i)
-            (*(*_observers)[i])->notify(message);
 }

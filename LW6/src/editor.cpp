@@ -37,7 +37,10 @@ Editor& Editor::operator=(Editor &&other) noexcept {
 }
 
 void Editor::add_npc(const std::string& type, const std::string& name, double x, double y) {
-    _npcs->add(*Factory::create_npc(type, name, x, y));
+    auto npc = Factory::create_npc(type, name, x, y);
+    for (int i = 0; i < _observers->size; ++i)
+        npc->add_observer(*(*_observers)[i]);
+    _npcs->add(*npc);
 }
 
 void Editor::save(const std::string &filename) {
@@ -57,14 +60,18 @@ void Editor::load(const std::string &filename) {
     if (!input)
         throw FileNotExistsException("Input file is not exist");
 
-    while (input.good())
-        _npcs->add(*Factory::load_npc(input));
+    while (input.good()) {
+        auto npc = Factory::load_npc(input);
+        for (int i = 0; i < _observers->size; ++i)
+            npc->add_observer(*(*_observers)[i]);
+        _npcs->add(*npc);
+    }
 
     input.close();
 }
 
 void Editor::fight(double max_distance) {
-    auto visitor = FightVisitor(_npcs, max_distance, _observers);
+    auto visitor = FightVisitor(_npcs, max_distance);
     visitor.fight();
 }
 
