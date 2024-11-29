@@ -4,7 +4,13 @@
 #include <editor.h>
 
 int main() {
-    auto editor = Editor();
+    auto rules = std::map({
+        std::pair<std::string, std::string> {"werewolf", "robber"},
+        std::pair<std::string, std::string> {"robber", "bear"},
+        std::pair<std::string, std::string> {"bear", "werewolf"}
+    });
+
+    auto editor = Editor(rules);
     auto console_observer = std::make_shared<ConsoleObserver>(ConsoleObserver());
     auto file_observer = std::make_shared<FileObserver>(FileObserver("log.txt"));
     editor.add_observer(console_observer);

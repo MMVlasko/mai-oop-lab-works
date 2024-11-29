@@ -5,6 +5,14 @@
 #include <exceptions.h>
 #include <factory.h>
 
+static auto rules = std::make_shared<std::map<std::string, std::string>>(
+    std::map({
+        std::pair<std::string, std::string> {"werewolf", "robber"},
+        std::pair<std::string, std::string> {"robber", "bear"},
+        std::pair<std::string, std::string> {"bear", "werewolf"}
+    })
+);
+
 TEST(create_npc, test)
 {
     auto type = "werewolf";
@@ -13,14 +21,14 @@ TEST(create_npc, test)
     auto x = 100.;
     auto y = 200.1;
 
-    auto npc = Factory::create_npc(type, name, x, y);
+    auto npc = Factory::create_npc(type, name, x, y, rules);
 
     ASSERT_EQ(npc->get_type(), type);
     ASSERT_EQ(npc->get_name(), name);
     ASSERT_EQ(npc->get_crds().x, x);
     ASSERT_EQ(npc->get_crds().y, y);
 
-    ASSERT_THROW(Factory::create_npc(incorrect_type, name, x, y), UnknownNPCTypeException);
+    ASSERT_THROW(Factory::create_npc(incorrect_type, name, x, y, rules), UnknownNPCTypeException);
 }
 
 TEST(load_npc, test)
@@ -41,16 +49,16 @@ TEST(load_npc, test)
     std::ifstream input(filename);
     ASSERT_TRUE(input.good());
 
-    auto npc = Factory::load_npc(input);
+    auto npc = Factory::load_npc(input, rules);
 
     ASSERT_EQ(npc->get_type(), type);
     ASSERT_EQ(npc->get_name(), name);
     ASSERT_EQ(npc->get_crds().x, x);
     ASSERT_EQ(npc->get_crds().y, y);
 
-    ASSERT_THROW(Factory::load_npc(input), UnknownNPCTypeException);
-    ASSERT_THROW(Factory::load_npc(input), InvalidCoordinatesExceptions);
-    ASSERT_THROW(Factory::load_npc(input), InvalidCoordinatesExceptions);
+    ASSERT_THROW(Factory::load_npc(input, rules), UnknownNPCTypeException);
+    ASSERT_THROW(Factory::load_npc(input, rules), InvalidCoordinatesExceptions);
+    ASSERT_THROW(Factory::load_npc(input, rules), InvalidCoordinatesExceptions);
 
     input.close();
 

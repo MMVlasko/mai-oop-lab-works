@@ -1,14 +1,17 @@
 #pragma once
 
+#include <map>
+
 #include "array.h"
 #include "npc.h"
 
 class Editor {
     std::shared_ptr<Array<NPC>> _npcs;
     std::shared_ptr<Array<std::shared_ptr<Observer>>> _observers;
+    std::shared_ptr<std::map<std::string, std::string>> _rules;
 
     public:
-        Editor();
+        explicit Editor(std::map<std::string, std::string> &rules);
 
         Editor(const Editor &other);
 

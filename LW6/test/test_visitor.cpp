@@ -5,6 +5,14 @@
 #include <visitor.h>
 #include <npc.h>
 
+static auto rules = std::make_shared<std::map<std::string, std::string>>(
+    std::map({
+        std::pair<std::string, std::string> {"werewolf", "robber"},
+        std::pair<std::string, std::string> {"robber", "bear"},
+        std::pair<std::string, std::string> {"bear", "werewolf"}
+    })
+);
+
 TEST(constructors_and_get_npcs, test)
 {
     auto max_distance = 100.;
@@ -17,13 +25,13 @@ TEST(constructors_and_get_npcs, test)
     auto npcs = std::make_shared<Array<NPC>>(Array<NPC>());
     npcs->add(npc);
 
-    auto visitor = FightVisitor(npcs, max_distance);
+    auto visitor = FightVisitor(npcs, max_distance, rules);
     auto new_visitor = FightVisitor(visitor);
-    auto another_visitor = FightVisitor(FightVisitor(npcs, max_distance));
-    auto copied_visitor = FightVisitor(npcs, max_distance);
+    auto another_visitor = FightVisitor(FightVisitor(npcs, max_distance, rules));
+    auto copied_visitor = FightVisitor(npcs, max_distance, rules);
     copied_visitor = visitor;
-    auto moved_visitor = FightVisitor(npcs, max_distance);
-    moved_visitor = FightVisitor(npcs, max_distance);
+    auto moved_visitor = FightVisitor(npcs, max_distance, rules);
+    moved_visitor = FightVisitor(npcs, max_distance, rules);
 }
 
 TEST(fight, test)
@@ -48,7 +56,7 @@ TEST(fight, test)
     npcs->add(npc_1);
     npcs->add(npc_2);
 
-    auto visitor = FightVisitor(npcs, max_distance);
+    auto visitor = FightVisitor(npcs, max_distance, rules);
     visitor.fight();
 
     ASSERT_EQ(npcs->size, expected_size);
@@ -80,7 +88,7 @@ TEST(visit, test)
     npc_1.add_observer(std::make_shared<ConsoleObserver>(observer));
     npc_2.add_observer(std::make_shared<ConsoleObserver>(observer));
 
-    auto visitor = FightVisitor(npcs, max_distance);
+    auto visitor = FightVisitor(npcs, max_distance, rules);
 
     testing::internal::CaptureStdout();
     visitor.visit(npc_2);

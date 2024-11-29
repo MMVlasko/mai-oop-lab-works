@@ -1,10 +1,12 @@
 #include <cmath>
 
 #include <npc.h>
+#include <tools.h>
 #include <visitor.h>
 
-FightVisitor::FightVisitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance) : _npcs(npcs),
-    _max_distance(max_distance) {}
+FightVisitor::FightVisitor(std::shared_ptr<Array<NPC>> &npcs, double max_distance,
+        const std::shared_ptr<std::map<std::string, std::string>>& rules) : _npcs(npcs),
+    _max_distance(max_distance), _rules(rules) {}
 
 FightVisitor &FightVisitor::operator=(const FightVisitor &other) {
     if (this != &other) {
@@ -51,9 +53,8 @@ void FightVisitor::visit(NPC &npc) {
     auto self_crds = npc.get_crds();
     auto other_crds = (*_npcs)[_now]->get_crds();
 
-    if ((self_type == "werewolf" && other_type == "robber" || self_type == "robber" && other_type == "bear" ||
-        self_type == "bear" && other_type == "werewolf") && std::pow((self_crds.x - other_crds.x), 2) +
-        std::pow((self_crds.y - other_crds.y), 2) <= std::pow(_max_distance, 2)) {
+    if (can_kill(self_type, other_type, _rules) &&
+            distance(self_crds.x, other_crds.x, self_crds.y, other_crds.y) <= _max_distance) {
         (*_npcs)[_now]->alive = false;
         npc.notify(*(*_npcs)[_now]);
     }

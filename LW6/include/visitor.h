@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "array.h"
 
 class NPC;
@@ -12,12 +14,14 @@ class Visitor {
 };
 
 class FightVisitor : Visitor {
+    const std::shared_ptr<std::map<std::string, std::string>>& _rules;
     std::shared_ptr<Array<NPC>> _npcs;
     double _max_distance;
     int _now = 0;
 
     public:
-        FightVisitor(std::shared_ptr<Array<NPC>>& npcs, double max_distance);
+        FightVisitor(std::shared_ptr<Array<NPC>>& npcs, double max_distance,
+            const std::shared_ptr<std::map<std::string, std::string>>& rules);
 
         FightVisitor(const FightVisitor &other) = default;
 

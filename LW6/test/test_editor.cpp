@@ -4,17 +4,23 @@
 
 #include <editor.h>
 
+static auto rules = std::map({
+    std::pair<std::string, std::string> {"werewolf", "robber"},
+    std::pair<std::string, std::string> {"robber", "bear"},
+    std::pair<std::string, std::string> {"bear", "werewolf"}
+});
+
 TEST(constructors_and_get_npcs, test)
 {
     auto expected_size = 0;
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
     auto new_editor = Editor(editor);
-    auto another_editor = Editor(Editor());
-    auto copied_editor = Editor();
+    auto another_editor = Editor(Editor(rules));
+    auto copied_editor = Editor(rules);
     copied_editor = editor;
-    auto moved_editor = Editor();
-    moved_editor = Editor();
+    auto moved_editor = Editor(rules);
+    moved_editor = Editor(rules);
 
     auto editor_npcs = editor.get_npcs();
     auto new_editor_npcs = new_editor.get_npcs();
@@ -37,7 +43,7 @@ TEST(create_and_add_npc, test)
     auto x = 100.;
     auto y = 200.1;
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
     editor.add_npc(type, name, x, y);
     auto npcs = editor.get_npcs();
 
@@ -65,7 +71,7 @@ TEST(load_npc, test)
     _input << npc_data;
     _input.close();
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
     editor.load(filename);
     auto npcs = editor.get_npcs();
 
@@ -93,7 +99,7 @@ TEST(save_npc, test)
     auto filename = "output.txt";
     auto npc_data = "werewolf Mihail 100.1 200.3";
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
 
     editor.add_npc(type, name, x, y);
     editor.add_npc(type, name, x, y);
@@ -132,7 +138,7 @@ TEST(fight, test)
     auto x_2 = 150.;
     auto y_2 = 250.1;
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
     auto console_observer = std::make_shared<ConsoleObserver>(ConsoleObserver());
     editor.add_observer<ConsoleObserver>(console_observer);
 
@@ -160,7 +166,7 @@ TEST(print, test)
     auto x_2 = 150.;
     auto y_2 = 250.1;
 
-    auto editor = Editor();
+    auto editor = Editor(rules);
 
     editor.add_npc(type_1, name_1, x_1, y_1);
     editor.add_npc(type_2, name_2, x_2, y_2);

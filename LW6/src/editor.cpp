@@ -5,23 +5,27 @@
 #include <factory.h>
 #include <visitor.h>
 
-Editor::Editor() {
+Editor::Editor(std::map<std::string, std::string> &rules) {
+    _rules = std::make_shared<std::map<std::string, std::string>>(rules);
     _npcs = std::make_shared<Array<NPC>>(Array<NPC>());
     _observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array<std::shared_ptr<Observer>>());
 }
 
 Editor::Editor(const Editor &other) {
+    _rules = std::make_shared<std::map<std::string, std::string>>(std::map(*other._rules));
     _npcs = std::make_shared<Array<NPC>>(Array(*other._npcs));
     _observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array(*other._observers));
 }
 
 Editor::Editor(Editor &&other) noexcept {
+    _rules = other._rules;
     _npcs = other._npcs;
     _observers = other._observers;
 }
 
 Editor& Editor::operator=(const Editor &other) {
     if (this != &other) {
+        _rules = std::make_shared<std::map<std::string, std::string>>(std::map(*other._rules));
         _npcs = std::make_shared<Array<NPC>>(Array(*other._npcs));
         _observers = std::make_shared<Array<std::shared_ptr<Observer>>>(Array(*other._observers));
     }
@@ -30,6 +34,7 @@ Editor& Editor::operator=(const Editor &other) {
 
 Editor& Editor::operator=(Editor &&other) noexcept {
     if (this != &other) {
+        _rules = other._rules;
         _npcs = other._npcs;
         _observers = other._observers;
     }
@@ -37,7 +42,7 @@ Editor& Editor::operator=(Editor &&other) noexcept {
 }
 
 void Editor::add_npc(const std::string& type, const std::string& name, double x, double y) {
-    auto npc = Factory::create_npc(type, name, x, y);
+    auto npc = Factory::create_npc(type, name, x, y, _rules);
     for (int i = 0; i < _observers->size; ++i)
         npc->add_observer(*(*_observers)[i]);
     _npcs->add(*npc);
@@ -61,7 +66,7 @@ void Editor::load(const std::string &filename) {
         throw FileNotExistsException("Input file is not exist");
 
     while (input.good()) {
-        auto npc = Factory::load_npc(input);
+        auto npc = Factory::load_npc(input, _rules);
         for (int i = 0; i < _observers->size; ++i)
             npc->add_observer(*(*_observers)[i]);
         _npcs->add(*npc);
@@ -71,7 +76,7 @@ void Editor::load(const std::string &filename) {
 }
 
 void Editor::fight(double max_distance) {
-    auto visitor = FightVisitor(_npcs, max_distance);
+    auto visitor = FightVisitor(_npcs, max_distance, _rules);
     visitor.fight();
 }
 
