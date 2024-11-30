@@ -4,16 +4,18 @@
 
 #include "array.h"
 
+class BaseNPC;
+
 class NPC;
 
 class Visitor {
     public:
         virtual ~Visitor() = default;
 
-        virtual void visit(NPC& npc) = 0;
+        virtual void visit(BaseNPC& npc) = 0;
 };
 
-class FightVisitor : Visitor {
+class FightVisitor : public Visitor {
     const std::shared_ptr<std::map<std::string, std::string>>& _rules;
     std::shared_ptr<Array<NPC>> _npcs;
     double _max_distance;
@@ -33,5 +35,5 @@ class FightVisitor : Visitor {
 
         void fight();
 
-        void visit(NPC &npc) override;
+        void visit(BaseNPC &npc) override;
 };

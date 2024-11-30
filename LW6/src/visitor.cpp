@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include <npc.h>
 #include <tools.h>
 #include <visitor.h>
@@ -47,14 +45,13 @@ void FightVisitor::fight() {
     }
 }
 
-void FightVisitor::visit(NPC &npc) {
-    auto self_type = npc.get_type();
-    auto other_type = (*_npcs)[_now]->get_type();
-    auto self_crds = npc.get_crds();
-    auto other_crds = (*_npcs)[_now]->get_crds();
+void FightVisitor::visit(BaseNPC &npc) {
+    auto att_t = npc.get_type();
+    auto def_t = (*_npcs)[_now]->get_type();
+    auto att_crds = npc.get_crds();
+    auto def_crds = (*_npcs)[_now]->get_crds();
 
-    if (can_kill(self_type, other_type, _rules) &&
-            distance(self_crds.x, other_crds.x, self_crds.y, other_crds.y) <= _max_distance) {
+    if (can_kill(att_t, def_t, _rules) && distance(att_crds, def_crds) <= _max_distance) {
         (*_npcs)[_now]->alive = false;
         npc.notify(*(*_npcs)[_now]);
     }

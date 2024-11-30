@@ -36,13 +36,11 @@ TEST(can_kill, test)
 
 TEST(distance, test)
 {
-    auto x1 = 4.;
-    auto x2 = 0.;
-    auto y1 = 3.;
-    auto y2 = 0.;
+    auto first = Pair{4, 3};
+    auto second = Pair{0, 0};
     auto expected = 5.;
 
-    auto result = distance(x1, x2, y1, y2);
+    auto result = distance(first, second);
 
     ASSERT_EQ(expected, result);
 }

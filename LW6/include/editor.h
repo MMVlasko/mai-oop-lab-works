@@ -42,4 +42,6 @@ class Editor {
 template <class ObserverT>
 void Editor::add_observer(std::shared_ptr<ObserverT> &observer) {
     _observers->add(observer);
+    for (int i = 0; i < _npcs->size; ++i)
+        (*_npcs)[i]->add_observer(observer);
 }

@@ -49,15 +49,15 @@ void Editor::add_npc(const std::string& type, const std::string& name, double x,
 }
 
 void Editor::save(const std::string &filename) {
-    std::ofstream input(filename);
-    if (!input)
+    std::ofstream output(filename);
+    if (!output)
         throw FileNotExistsException("Error with open output file");
 
     for (int i = 0; i < _npcs->size - 1; ++i)
-        (*_npcs)[i]->save(input);
-    (*_npcs)[-1]->save(input, false);
+        (*_npcs)[i]->save(output);
+    (*_npcs)[-1]->save(output, false);
 
-    input.close();
+    output.close();
 }
 
 void Editor::load(const std::string &filename) {
