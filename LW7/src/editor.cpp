@@ -140,7 +140,6 @@ void Editor::move_and_analysis(int timeout) {
                         if (distance(now, (*_npcs)[j]->get_crds()) <= kill_distance) {
                             (*_npcs)[i]->status = BATTLER;
                             (*_npcs)[j]->status = BATTLER;
-                            fight((*_npcs)[i], (*_npcs)[j]);
                             std::thread fight_thread(fight, (*_npcs)[i], (*_npcs)[j], false);
                             fight_thread.detach();
                             break;
